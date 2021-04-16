@@ -1,6 +1,14 @@
 let Image = require('../models/images');
 const fs = require('fs');
 
+const getImageData = function(path){
+    return new Promise((resolve, reject) => {
+    fs.readFile(path,'base64', (err,data) => {
+        if(err) reject(err);
+        resolve(data)
+    });
+})}
+
 exports.getByName = function (req, res) {
     let imageName = req.params.name;
     if (imageName == null) {
@@ -17,11 +25,18 @@ exports.getByName = function (req, res) {
                     let firstElem = images[0];
                     image = {
                         name: firstElem.name,
-                        path: firstElem.path,
-                        image: firstElem.image
+                        path: firstElem.path
                     };
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(image));
+                    getImageData(image.path)
+                        .then((imageData)=>{
+                            image.image = imageData;
+                            res.setHeader('Content-Type', 'application/json');
+                            res.send(JSON.stringify(image));
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            res.send(err);
+                        })
                 } else {
                     res.sendStatus(404);
                 }

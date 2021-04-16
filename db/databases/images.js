@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
-const mongoDB = 'mongodb://localhost:27017/images';
-
 mongoose.Promise = global.Promise;
+const mongoDB = 'mongodb://localhost:27017/images';
 
 try {
     connection = mongoose.connect(mongoDB, {
