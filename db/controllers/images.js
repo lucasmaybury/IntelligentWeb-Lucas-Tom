@@ -1,9 +1,10 @@
 let Image = require('../models/images');
+const path = require('path');
 const fs = require('fs');
 
-const getImageData = function(path){
+const getImageData = function(imagePath){
     return new Promise((resolve, reject) => {
-    fs.readFile(path,'base64', (err,data) => {
+    fs.readFile(imagePath,'base64', (err,data) => {
         if(err) reject(err);
         resolve(data)
     });
@@ -16,26 +17,27 @@ exports.getByName = function (req, res) {
     }
     try {
         Image.find({name: imageName},
-            'name path image',
+            'name title description authorName',
             function (err, images) {
                 if (err)
                     res.status(500).send('Invalid data!');
-                let image =null;
                 if (images.length>0) {
                     let firstElem = images[0];
-                    image = {
-                        name: firstElem.name,
-                        path: firstElem.path
-                    };
-                    getImageData(image.path)
-                        .then((imageData)=>{
-                            image.image = imageData;
+                    getImageData(firstElem.path)
+                        .then(imageData => {
+                            let image = {
+                                name: firstElem.name,
+                                title: firstElem.title,
+                                description : firstElem.description,
+                                authorName: firstElem.authorName,
+                                image: imageData
+                            };
                             res.setHeader('Content-Type', 'application/json');
                             res.send(JSON.stringify(image));
                         })
                         .catch(err => {
                             console.log(err);
-                            res.send(err);
+                            res.status(500).send(err);
                         })
                 } else {
                     res.sendStatus(404);
