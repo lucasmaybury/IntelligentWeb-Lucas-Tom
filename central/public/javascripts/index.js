@@ -74,6 +74,12 @@ function sendChatText() {
     chat.emit('chat', roomNo, name, chatText);
 }
 
+function sendNewsText() {
+    let newsText = document.getElementById('news_input').value;
+    news.emit('news', roomNo, name, newsText);
+    document.getElementById('news_input').value='';
+}
+
 /**
  * used to connect to a room. It gets the user name and room number from the
  * interface
@@ -86,6 +92,8 @@ function connectToRoom() {
     //@todo join the room
     initCanvas(socket, imageUrl);
     hideLoginInterface(roomNo, name);
+    chat.emit('create or join', roomNo, name);
+    news.emit('create or join', roomNo, name);
 }
 
 /**
