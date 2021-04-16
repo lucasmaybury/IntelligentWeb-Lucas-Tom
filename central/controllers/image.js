@@ -8,9 +8,8 @@ exports.sendImageToClient = function (req, res) {
     }
 
     fetch(`http://localhost:3001/${req.params.name}`, headers)
-        .then(res => {
-            res.json()
-        } )
+        .then(response => response.json())
+        .then(image => res.send(image))
         .catch(err => {
             if (err.status === 404) {
                 res.sendStatus(404)
