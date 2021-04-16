@@ -5,7 +5,7 @@ var image = require('../controllers/image');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Image Browsing' });
+  res.render('index', { title: 'Pied Piper' });
 });
 
 router.get('/image/:name', image.sendImageToClient)

@@ -1,7 +1,6 @@
 let name = null;
 let roomNo = null;
-let chat = io.connect('/chat');
-let news = io.connect('news');
+let socket=null;
 
 
 /**
@@ -14,8 +13,6 @@ function init() {
     document.getElementById('initial_form').style.display = 'block';
     document.getElementById('chat_interface').style.display = 'none';
 
-    initChatSocket();
-    initNewsSocket();
     //@todo here is where you should initialise the socket operations as described in teh lectures (room joining, chat message receipt etc.)
 }
 
@@ -29,55 +26,13 @@ function generateRoom() {
     document.getElementById('roomNo').value = 'R' + roomNo;
 }
 
-//initialises the socket chat function - added by Tom
-function initChatSocket() {
-    // called when someone joins the room. If it is someone else it notifies the joining of the room
-    chat.on('joined', function (room, userId) {
-        if (userId === name) {
-            // it enters the chat
-            hideLoginInterface(room, userId);
-        } else {
-            // notifies that someone has joined the room
-            writeOnChatHistory('<b>' + userId + '</b>' + ' joined room ' + room);
-        }
-    });
-    // called when a message is received
-    chat.on('chat', function (room, userId, chatText) {
-        let who = userId
-        if (userId === name) who = 'Me';
-        writeOnChatHistory('<b>' + who + ':</b> ' + chatText);
-    });
-}
-
-//initialises the socket for /news
-function initNewsSocket(){
-    news.on('joined', function (room, userId) {
-        if (userId !== name) {
-            // notifies that someone has joined the room
-            writeOnNewsHistory('<b>'+userId+'</b>' + ' joined news room ' + room);
-        }
-    });
-
-    // called when some news is received (note: only news received by others are received)
-    news.on('news', function (room, userId, newsText) {
-        writeOnNewsHistory('<b>' + userId + ':</b> ' + newsText);
-    });
-}
-
 /**
  * called when the Send button is pressed. It gets the text to send from the interface
  * and sends the message via  socket
  */
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
-    // @todo send the chat message - added by tom
-    chat.emit('chat', roomNo, name, chatText);
-}
-
-function sendNewsText() {
-    let newsText = document.getElementById('news_input').value;
-    news.emit('news', roomNo, name, newsText);
-    document.getElementById('news_input').value='';
+    // @todo send the chat message
 }
 
 /**
@@ -92,8 +47,6 @@ function connectToRoom() {
     //@todo join the room
     initCanvas(socket, imageUrl);
     hideLoginInterface(roomNo, name);
-    chat.emit('create or join', roomNo, name);
-    news.emit('create or join', roomNo, name);
 }
 
 /**
