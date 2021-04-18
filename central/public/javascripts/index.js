@@ -4,6 +4,7 @@ let socket=null;
 let chat = io.connect('/chat');
 let news = io.connect('/news');
 
+
 /**
  * called by <body onload>
  * it initialises the interface and the expected socket messages
@@ -13,7 +14,6 @@ function init() {
     // it sets up the interface so that userId and room are selected
     document.getElementById('initial_form').style.display = 'block';
     document.getElementById('chat_interface').style.display = 'none';
-
     initChatSocket();
     initNewsSocket();
     //@todo here is where you should initialise the socket operations as described in teh lectures (room joining, chat message receipt etc.)
@@ -47,7 +47,6 @@ function initChatSocket() {
         if (userId === name) who = 'Me';
         writeOnChatHistory('<b>' + who + ':</b> ' + chatText);
     });
-
 }
 
 /**
@@ -60,7 +59,6 @@ function initNewsSocket(){
             writeOnNewsHistory('<b>'+userId+'</b>' + ' joined news room ' + room);
         }
     });
-
     // called when some news is received (note: only news received by others are received)
     news.on('news', function (room, userId, newsText) {
         writeOnNewsHistory('<b>' + userId + ':</b> ' + newsText);
@@ -71,18 +69,20 @@ function initNewsSocket(){
  * called when the Send button is pressed. It gets the text to send from the interface
  * and sends the message via  socket
  */
+
 function sendChatText() {
-    let chatText = document.getElementById('chat_input').value;
+    let chatText = document.getElementById('input').value;
     chat.emit('chat', roomNo, name, chatText);
 }
 /**
  * called when the Send button is pressed for news. It gets the text to send from the interface
- * and sends the message via  socket
+ * and sends the message via  sockets
  */
+
 function sendNewsText (){
-    let newsText = document.getElementById('news_input').value;
+    let newsText = document.getElementById('input').value;
     news.emit('news', roomNo, name, newsText);
-    document.getElementById('news_input').value='';
+    document.getElementById('news_send').value='';
 }
 
 /**
@@ -95,7 +95,7 @@ function connectToRoom() {
     let imageUrl= document.getElementById('image_url').value;
     if (!name) name = 'Unknown-' + Math.random();
     //@todo join the room
-    //initCanvas(socket, imageUrl);
+    initCanvas(socket, imageUrl);
     hideLoginInterface(roomNo, name);
     chat.emit('create or join', roomNo, name);
     news.emit('create or join', roomNo, name);
@@ -106,10 +106,10 @@ function connectToRoom() {
  * @param text: teh text to append
  */
 function writeOnChatHistory(text) {
-    let history = document.getElementById('chat_history');
+    let history = document.getElementById('history');
     let paragraph = document.createElement('p');
     paragraph.innerHTML = text;
-    history.appendChild(paragraph);
+   history.appendChild(paragraph);
     document.getElementById('chat_input').value = '';
 }
 /**
