@@ -72,7 +72,6 @@ function connectToRoom() {
     initCanvas(socket, imageUrl);
     hideLoginInterface(roomNo, name);
     chat.emit('create or join', roomNo, name);
-
 }
 
 /**
