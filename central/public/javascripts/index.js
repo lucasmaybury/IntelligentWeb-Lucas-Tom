@@ -25,7 +25,7 @@ function init() {
     else {
         alert('This browser doesn\'t support IndexedDB');
     }
-    loadData(false);
+    //loadData(false);
 }
 
 /**
@@ -55,6 +55,7 @@ function initChatSocket() {
         let who = userId
         if (userId === name) who = 'Me';
         writeOnChatHistory('<b>' + who + ':</b> ' + chatText);
+        saveMessageToCache(userId, chatText);
     });
 }
 

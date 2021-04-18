@@ -9,22 +9,27 @@
 // the database receives from the server the following structure
 import * as idb from './idb/index.js';
 
+/*
+Database Stores:
 
-/** class WeatherForecast{
- *  constructor (location, date, forecast, temperature, wind, precipitations) {
- *    this.location= location;
- *    this.date= date,
- *    this.forecast=forecast;
- *    this.temperature= temperature;
- *    this.wind= wind;
- *    this.precipitations= precipitations;
- *  }
- *}
+Image:
+id, name, title, description, author, image
+
+Messages:
+id, user, text
+
+Annotation:
+tbd
+
+Transitions:
+id, source, destination
  */
+
 let db;
 
 const DB_NAME= 'db_spychat';
 const IMAGE_STORE_NAME= 'store_image';
+const MESSAGES_STORE_NAME= 'store_messages';
 const ANNOTATIONS_STORE_NAME= 'store_annotations';
 const TRANSITIONS_STORE_NAME= 'store_transitions';
 
@@ -41,6 +46,14 @@ async function initDatabase(){
                         autoIncrement: true
                     });
                     sumsDB.createIndex('name', 'name', {unique: true, multiEntry: true});
+                }
+
+                if (!upgradeDb.objectStoreNames.contains(MESSAGES_STORE_NAME)) {
+                    let sumsDB = upgradeDb.createObjectStore(MESSAGES_STORE_NAME, {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                    sumsDB.createIndex('id', 'id', {unique: true, multiEntry: true});
                 }
 
                 if (!upgradeDb.objectStoreNames.contains(ANNOTATIONS_STORE_NAME)) {
