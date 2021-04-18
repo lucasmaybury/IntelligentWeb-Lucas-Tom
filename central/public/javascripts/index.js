@@ -69,9 +69,10 @@ function connectToRoom() {
     let imageUrl= document.getElementById('image_url').value;
     if (!name) name = 'Unknown-' + Math.random();
     //@todo join the room
-    initCanvas(socket, imageUrl, );
+    initCanvas(socket, imageUrl);
     hideLoginInterface(roomNo, name);
     chat.emit('create or join', roomNo, name);
+
 }
 
 /**
