@@ -13,7 +13,7 @@ exports.init = function(io) {
                 chat.to(room).emit('joined', room, userId);
             });
 
-            socket.on('chat', function (room, userId, chatText) {
+            socket.on('chat', (room, userId, chatText) => {
                 chat.to(room).emit('chat', room, userId, chatText);
             });
 
@@ -26,24 +26,24 @@ exports.init = function(io) {
         }
     });
 
-    // the news namespace
-    const news= io
-        .of('/news')
-        .on('connection', function (socket) {
-            try {
-                socket.on('create or join', function (room, userId) {
-                    socket.join(room);
-                    socket.broadcast.to(room).emit('joined', room, userId);
-                });
+    /**
+     * The images namespace for handling drawing and canvas activities betweeen clients
+     */
+    const images = io.of("/images").on("connection",  (socket) => {
+        try {
+            // Enroll in a room
+            socket.on("enrol", (room) => {
+                socket.join(room);
+            });
+            // Drawing on canvas
+            socket.on("drawing", (room, user, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness) => {
+                images.to(room).emit("draw", user, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
+            });
+            // Clearing the canvas
+            socket.on("clear", (room, user) => {
+                images.to(room).emit("clear", user);
+            });
+        } catch (e) {}
+    });
 
-                socket.on('news', function (room, userId, chatText) {
-                    socket.broadcast.to(room).emit('news', room, userId, chatText);
-                });
-
-                socket.on('disconnect', function () {
-                    console.log('someone disconnected');
-                });
-            } catch (e) {
-            }
-        });
 }
