@@ -10,6 +10,13 @@ const getImageData = function(imagePath){
     });
 })}
 
+let writeFilePromise = (path, file) => new Promise((resolve, reject) => {
+    fs.writeFile(path, file, (err) => {
+        if(err) reject();
+        resolve();
+    });
+})
+
 exports.getByName = function (req, res) {
     let imageName = req.params.name;
     if (imageName == null) {
@@ -35,16 +42,12 @@ exports.getByName = function (req, res) {
                             res.setHeader('Content-Type', 'application/json');
                             res.send(JSON.stringify(image));
                         })
-                        .catch(err => {
-                            console.log(err);
-                            res.status(500).send(err);
-                        })
                 } else {
                     res.sendStatus(404);
                 }
             });
     } catch (e) {
-        console.log(err);
+        console.error(err);
         res.status(500).send('error '+ e);
     }
 }
@@ -66,21 +69,11 @@ exports.insert = async function (req, res) {
         let fileSave = writeFilePromise(image.path, imageFile)
         let dbSave = image.save();
 
-        Promise.all([fileSave,dbSave ])
-            .then(() => {
-                res.setHeader('Content-Type', 'application/json');
-                res.status(201).send(JSON.stringify(image));
-            })
+        Promise.all([fileSave,dbSave])
+            .then(() => res.status(201).end());
+
     } catch (err) {
         console.log(err);
         res.status(500).send('error '+ err);
     }
 }
-
-let writeFilePromise = (path, file) => new Promise((resolve, reject) => {
-    fs.writeFile(path, file, (err) => {
-        if(err) reject();
-        resolve();
-    });
-})
-

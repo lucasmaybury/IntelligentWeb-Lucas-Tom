@@ -31,7 +31,7 @@ exports.saveImageToDB = function (req, res) {
     fetch(`http://localhost:3001`, headers)
         .then(response => {
             if(response.status !== 201) { throw new Error('error saving to database') }
-            res.send(response);
+            res.status(201).end();
         })
         .catch(err => {
             console.log(err);
