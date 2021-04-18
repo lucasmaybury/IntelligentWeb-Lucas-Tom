@@ -26,4 +26,24 @@ exports.init = function(io) {
         }
     });
 
+    /**
+     * The images namespace for handling drawing and canvas activities betweeen clients
+     */
+    const images = io.of("/images").on("connection",  (socket) => {
+        try {
+            // Enroll in a room
+            socket.on("enrol", (room) => {
+                socket.join(room);
+            });
+            // Drawing on canvas
+            socket.on("drawing", (room, user, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness) => {
+                images.to(room).emit("draw", user, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
+            });
+            // Clearing the canvas
+            socket.on("clear", (room, user) => {
+                images.to(room).emit("clear", user);
+            });
+        } catch (e) {}
+    });
+
 }

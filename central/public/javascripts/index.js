@@ -26,7 +26,9 @@ function generateRoom() {
     document.getElementById('roomNo').value = 'R' + roomNo;
 }
 
-
+/**
+ * it initialises the socket for /chat
+ */
 function initChatSocket() {
     // called when someone joins the room. If it is someone else it notifies the joining of the room
     chat.on('joined', function (room, userId) {
@@ -70,7 +72,6 @@ function connectToRoom() {
     initCanvas(socket, imageUrl);
     hideLoginInterface(roomNo, name);
     chat.emit('create or join', roomNo, name);
-    news.emit('create or join', roomNo, name);
 }
 
 /**
