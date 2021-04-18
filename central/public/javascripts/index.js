@@ -14,6 +14,15 @@ function init() {
     document.getElementById('chat_interface').style.display = 'none';
 
     //@todo here is where you should initialise the socket operations as described in teh lectures (room joining, chat message receipt etc.)
+
+    //check for support
+    if ('indexedDB' in window) {
+        initDatabase();
+    }
+    else {
+        alert('This browser doesn\'t support IndexedDB');
+    }
+    loadData(false);
 }
 
 /**
