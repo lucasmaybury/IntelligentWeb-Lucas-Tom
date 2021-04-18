@@ -13,7 +13,7 @@ exports.init = function(io) {
                 chat.to(room).emit('joined', room, userId);
             });
 
-            socket.on('chat', function (room, userId, chatText) {
+            socket.on('chat', (room, userId, chatText) => {
                 chat.to(room).emit('chat', room, userId, chatText);
             });
 
@@ -25,7 +25,7 @@ exports.init = function(io) {
 
         }
     });
-
+/*
     // the news namespace
     const news= io
         .of('/news')
@@ -46,4 +46,6 @@ exports.init = function(io) {
             } catch (e) {
             }
         });
+
+ */
 }

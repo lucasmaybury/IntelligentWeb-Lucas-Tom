@@ -1,6 +1,6 @@
 let name = null;
 let roomNo = null;
-let socket=null;
+let socket;
 let chat = io.connect('/chat');
 let news = io.connect('/news');
 
@@ -71,20 +71,20 @@ function initNewsSocket(){
  */
 
 function sendChatText() {
-    let chatText = document.getElementById('input').value;
+    let chatText = document.getElementById('chat_input').value;
     chat.emit('chat', roomNo, name, chatText);
 }
 /**
  * called when the Send button is pressed for news. It gets the text to send from the interface
  * and sends the message via  sockets
  */
-
+/*
 function sendNewsText (){
     let newsText = document.getElementById('input').value;
     news.emit('news', roomNo, name, newsText);
     document.getElementById('news_send').value='';
 }
-
+*/
 /**
  * used to connect to a room. It gets the user name and room number from the
  * interface
@@ -109,7 +109,7 @@ function writeOnChatHistory(text) {
     let history = document.getElementById('history');
     let paragraph = document.createElement('p');
     paragraph.innerHTML = text;
-   history.appendChild(paragraph);
+    history.appendChild(paragraph);
     document.getElementById('chat_input').value = '';
 }
 /**
