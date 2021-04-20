@@ -10,8 +10,8 @@
 </head>
 <body onload="init()">
 
-<div id="initial_form" style="display: block">
-    <h1><%= title %></h1>
+<div class="content" id="initial_form" style="display: block">
+    <h1>Sign in By URL</h1>
     <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
     <form onsubmit="return false;">
         <p><label for="name"> Your name </label>
@@ -31,10 +31,30 @@
     </form>
 </div>
 
-
 <div id="initial_form2" style="display: block">
-    <h1><%= title %></h1>
-    <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
+    <h1>Upload or Take a Picture</h1>
+    <form action="/upload" method="POST">
+        <p><label for="name"> Choose a file </label>
+            <input type="file" id="myFile" name="myImage">
+        </p>
+        <p>
+            <label for="name"> For your image enter a: </label>
+        </p>
+        <p>
+            <label for="name"> Name:  </label>
+            <input type="text" id="uploadName" name="uploadName">
+        </p>
+        <p>
+            <label for="name"> Title:  </label>
+            <input type="text" id="uploadTitle" name="uploadTitle">
+        </p>
+        <p>
+            <label for="name"> Description:  </label>
+            <input type="text" id="uploadDesc" name="uploadDesc">
+        </p>
+
+        <button id="connect" onclick="uploadPicture()">Upload</button>
+    </form>
 </div>
 
 
