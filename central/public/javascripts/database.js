@@ -9,22 +9,6 @@
 // the database receives from the server the following structure
 import * as idb from './idb/index.js';
 
-/*
-Database Stores:
-
-Image:
-id, name, title, description, author, image
-
-Messages:
-id, roomNo, user, text
-
-Annotation:
-tbd
-
-Transitions:
-id, source, destination
- */
-
 let db;
 
 const DB_NAME= 'db_spychat';
@@ -40,6 +24,9 @@ async function initDatabase(){
     if (!db) {
         db = await idb.openDB(DB_NAME, 2, {
             upgrade(upgradeDb, oldVersion, newVersion) {
+
+                //Image:
+                // id, name, title, description, author, image
                 if (!upgradeDb.objectStoreNames.contains(IMAGE_STORE_NAME)) {
                     let sumsDB = upgradeDb.createObjectStore(IMAGE_STORE_NAME, {
                         keyPath: 'id',
@@ -48,14 +35,18 @@ async function initDatabase(){
                     sumsDB.createIndex('name', 'name', {unique: true, multiEntry: true});
                 }
 
+                //Messages:
+                // id, room, user, text
                 if (!upgradeDb.objectStoreNames.contains(MESSAGES_STORE_NAME)) {
                     let sumsDB = upgradeDb.createObjectStore(MESSAGES_STORE_NAME, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    sumsDB.createIndex('id', 'id', {unique: true, multiEntry: true});
+                    sumsDB.createIndex('roomNo', 'roomNo', {unique: true, multiEntry: true});
                 }
 
+                //Annotation:
+                // tbd
                 if (!upgradeDb.objectStoreNames.contains(ANNOTATIONS_STORE_NAME)) {
                     let sumsDB = upgradeDb.createObjectStore(ANNOTATIONS_STORE_NAME, {
                         keyPath: 'id',
@@ -64,6 +55,8 @@ async function initDatabase(){
                     sumsDB.createIndex('id', 'id', {unique: true, multiEntry: true});
                 }
 
+                //Transitions:
+                // id, source, destination
                 if (!upgradeDb.objectStoreNames.contains(TRANSITIONS_STORE_NAME)) {
                     let sumsDB = upgradeDb.createObjectStore(TRANSITIONS_STORE_NAME, {
                         keyPath: 'id',
@@ -100,3 +93,35 @@ async function storeMessageData(messageObject) {
     else localStorage.setItem(messageObject.id, JSON.stringify(messageObject));
 }
 window.storeMessageData= storeMessageData;
+
+/**
+ * Gets all cached
+ * @param roomName
+ * @returns {Promise<*[]>}
+ */
+async function getRoomMessages(room) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try {
+            console.log('fetching: ' + room);
+            let tx = await db.transaction(MESSAGES_STORE_NAME, 'readonly');
+            let store = await tx.objectStore(MESSAGES_STORE_NAME);
+            let index = await store.index('roomNo');
+            let readingsList = await index.getAll();
+            await tx.complete;
+            return readingsList;
+        } catch (error) {
+            console.error(error)
+            //alert("unable to get chat history for this room")
+        }
+    } else {
+        const value = localStorage.getItem(city);
+        let finalResults=[];
+        if (value == null)
+            return finalResults;
+        else finalResults.push(value);
+        return finalResults;
+    }
+}
+window.getRoomMessages= getRoomMessages;

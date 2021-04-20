@@ -44,6 +44,7 @@ function initChatSocket() {
         if (userId === name) {
             // it enters the chat
             hideLoginInterface(room, userId);
+            getEntireChatHistory(room, userId);
         } else {
             // notifies that someone has joined the room
             writeOnChatHistory('<b>' + userId + '</b>' + ' joined room ' + room);
@@ -119,5 +120,13 @@ function cacheMessage(roomNo, userId, chatText) {
         roomNo: roomNo,
         userId: userId,
         chatText: chatText
-    })
+    });
+}
+
+
+async function getEntireChatHistory(room, userId) {
+    let messages = await getRoomMessages(room);
+    for(m in messages) {
+        writeOnChatHistory('<b>' + messages[m].userId + ':</b> ' + messages[m].chatText);
+    }
 }
