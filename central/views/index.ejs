@@ -12,7 +12,7 @@
 
 <div id="initial_form" style="display: block">
     <h1><%= title %></h1>
-    <p>Please insert the id of the Room you want to Join, if you do not have a room id, click Generate Room</p>
+    <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
     <form onsubmit="return false;">
         <p><label for="name"> Your name </label>
             <input type="text" id="name" name="name">
@@ -27,14 +27,16 @@
             <input type="text" id="image_url" name="image_url">
         </p>
 
-        <p class="form-group">
-            <label for="image"> Upload an Image </label>
-            <input type="file" name="image" id="image" accept="image/png, image/jpeg">
-        </p>
-
         <button id="connect" onclick="connectToRoom()">Connect</button>
     </form>
 </div>
+
+
+<div id="initial_form2" style="display: block">
+    <h1><%= title %></h1>
+    <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
+</div>
+
 
 <div id="chat_interface" style="display: none">
     <div>
@@ -56,7 +58,8 @@
             </p>
         </form>
     </div>
-
 </div>
+
+
 </body>
 </html>

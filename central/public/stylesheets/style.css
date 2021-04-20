@@ -35,3 +35,21 @@ a {
     position:absolute; top:0px; left:0px;
     background-color: rgba(255,0,0,.1);
 }
+
+#initial_form{
+    background-color: mintcream;
+    height:250px;
+    width:475px;
+    border:2px solid #000000;
+    float:left;
+    margin:20px;
+}
+
+#initial_form2{
+    background-color: mintcream;
+    height:250px;
+    width:475px;
+    border:2px solid #000000;
+    float:left;
+    margin:20px;
+}
