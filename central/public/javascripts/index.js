@@ -54,7 +54,7 @@ function initChatSocket() {
         let who = userId
         if (userId === name) who = 'Me';
         writeOnChatHistory('<b>' + who + ':</b> ' + chatText);
-        saveMessageToCache(userId, chatText);
+        cacheMessage(roomNo, userId, chatText);
     });
 }
 
@@ -108,3 +108,16 @@ function hideLoginInterface(room, userId) {
     document.getElementById('in_room').innerHTML= ' '+room;
 }
 
+/**
+ * saves a message to the indexedDB
+ * @param roomNo
+ * @param userId
+ * @param chatText
+ */
+function cacheMessage(roomNo, userId, chatText) {
+    storeMessageData({
+        roomNo: roomNo,
+        userId: userId,
+        chatText: chatText
+    })
+}
