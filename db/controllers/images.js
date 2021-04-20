@@ -10,6 +10,13 @@ const getImageData = function(imagePath){
     });
 })}
 
+let writeFilePromise = (path, file) => new Promise((resolve, reject) => {
+    fs.writeFile(path, file, (err) => {
+        if(err) reject();
+        resolve();
+    });
+})
+
 exports.getByName = function (req, res) {
     let imageName = req.params.name;
     if (imageName == null) {
@@ -35,38 +42,38 @@ exports.getByName = function (req, res) {
                             res.setHeader('Content-Type', 'application/json');
                             res.send(JSON.stringify(image));
                         })
-                        .catch(err => {
-                            console.log(err);
-                            res.status(500).send(err);
-                        })
                 } else {
                     res.sendStatus(404);
                 }
             });
     } catch (e) {
+        console.error(err);
         res.status(500).send('error '+ e);
     }
 }
 
-exports.insert = function (req, res) {
+exports.insert = async function (req, res) {
     let imageData = req.body;
     if (imageData == null) {
         res.status(403).send('No data sent!')
     }
     try {
-        const imageFile = new Buffer(imageData.image, 'base64')
-        const imagePath = `../private/${imageData.name}.jpg`
-        fs.writeFileSync(imagePath, imageFile);
-
-        let image = new Image({name: imageData.name, path: imagePath});
-
-        image.save(function (err, results) {
-            console.log(results._id);
+        let image = new Image({
+            name: imageData.name,
+            title: imageData.title,
+            description: imageData.description,
+            authorName: imageData.authorName,
         });
 
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(image));
-    } catch (e) {
-        res.status(500).send('error '+ e);
+        const imageFile = new Buffer.from(imageData.image, 'base64')
+        let fileSave = writeFilePromise(image.path, imageFile)
+        let dbSave = image.save();
+
+        Promise.all([fileSave,dbSave])
+            .then(() => res.status(201).end());
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('error '+ err);
     }
 }
