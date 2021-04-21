@@ -11,6 +11,9 @@ import * as idb from './idb/index.js';
 
 let db;
 
+/**
+ * Constants
+ */
 const DB_NAME= 'db_spychat';
 const IMAGE_STORE_NAME= 'store_image';
 const MESSAGES_STORE_NAME= 'store_messages';
@@ -18,7 +21,9 @@ const ANNOTATIONS_STORE_NAME= 'store_annotations';
 const TRANSITIONS_STORE_NAME= 'store_transitions';
 
 /**
- * it inits the database
+ * initialises the database
+ * sets up object stores if they dont exist
+ * creates indexes on the object stores
  */
 async function initDatabase(){
     if (!db) {
@@ -72,8 +77,9 @@ async function initDatabase(){
 window.initDatabase= initDatabase;
 
 /**
- * it saves the sum
- * @param sumObject: it contains  two numbers and their sum, e.g. {num1, num2, sum}
+ * saves a message received from socket.io (or elsewhere) to the indexedDB
+ * @param messageObject: the message to be saved
+ * @returns {Promise<void>}
  */
 async function storeMessageData(messageObject) {
     console.log('inserting: '+JSON.stringify(messageObject));
@@ -81,23 +87,23 @@ async function storeMessageData(messageObject) {
         await initDatabase();
     if (db) {
         try{
-            let tx = await db.transaction(MESSAGES_STORE_NAME, 'readwrite');
-            let store = await tx.objectStore(MESSAGES_STORE_NAME);
-            await store.put(messageObject);
-            await  tx.complete;
+            let tx = await db.transaction(MESSAGES_STORE_NAME, 'readwrite'); //init transaction
+            let store = await tx.objectStore(MESSAGES_STORE_NAME); //init store
+            await store.put(messageObject); //write the object to the store
+            await  tx.done; //end the transation
             console.log('added item to the store:'+ JSON.stringify(messageObject));
         } catch(error) {
             console.error('error storing message:\n'+error);
         };
     }
-    else localStorage.setItem(messageObject.id, JSON.stringify(messageObject));
+    else localStorage.setItem(messageObject.id, JSON.stringify(messageObject)); //XXXXXXXXXXX maybe remove this XXXXXXXXXXXXX
 }
 window.storeMessageData= storeMessageData;
 
 /**
- * Gets all cached
- * @param roomName
- * @returns {Promise<*[]>}
+ * Gets all cached messages
+ * @param roomNo: the name of the room that the message was sent to
+ * @returns {Promise<message object>}: a promise with the value of a collection of messages
  */
 async function getRoomMessages(roomNo) {
     if (!db)
@@ -105,16 +111,18 @@ async function getRoomMessages(roomNo) {
     if (db) {
         try {
             console.log('fetching: ' + roomNo);
-            let tx = await db.transaction(MESSAGES_STORE_NAME, 'readonly');
-            let store = await tx.objectStore(MESSAGES_STORE_NAME);
-            let roomIndex = await store.index('roomNo');
+            let tx = await db.transaction(MESSAGES_STORE_NAME, 'readonly'); //init transaction
+            let store = await tx.objectStore(MESSAGES_STORE_NAME); //init store
+            let roomIndex = await store.index('roomNo'); //init room index
             let readingsList = await roomIndex.getAll(IDBKeyRange.only(roomNo));
+            //get all rooms where the roomNo is the same as the requested value
             readingsList.sort((el1, el2) => el1.dateTime > el2.dateTime);
-            await tx.complete;
+            //sort the values in javascript (performing this in indexedDB is possible but would take some work)
+            await tx.complete; //end transaction
             return readingsList;
         } catch (error) {
             console.error(error)
-            //alert("unable to get chat history for this room")
+            alert("unable to get chat history for this room")
         }
     } else {
         alert("Error starting database")

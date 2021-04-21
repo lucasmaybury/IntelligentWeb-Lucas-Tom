@@ -1,16 +1,11 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var image = require('../controllers/image');
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
+/**
+ * GET home page and render it in browser
+ * */
+router.get('/', function(req, res) {
   res.render('index', { title: 'Image Browsing' });
 });
-
-router.get('/image/:name', image.sendImageToClient)
-
-router.post('/image', image.saveImageToDB);
-
 
 module.exports = router;

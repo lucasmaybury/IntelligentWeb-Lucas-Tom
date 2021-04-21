@@ -54,8 +54,8 @@ function initChatSocket() {
     chat.on('chat', function (room, userId, chatText) {
         let who = userId
         if (userId === name) who = 'Me';
-        writeOnChatHistory('<b>' + who + ':</b> ' + chatText);
-        cacheMessage(roomNo, userId, chatText);
+        writeOnChatHistory('<b>' + who + ':</b> ' + chatText); //writes message to screen
+        cacheMessage(roomNo, userId, chatText); //saves message to indexedDB
     });
 }
 
@@ -64,7 +64,6 @@ function initChatSocket() {
  * called when the Send button is pressed. It gets the text to send from the interface
  * and sends the message via  socket
  */
-
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     chat.emit('chat', roomNo, name, chatText);
@@ -87,7 +86,7 @@ function connectToRoom() {
 
 /**
  * it appends the given html text to the history div
- * @param text: teh text to append
+ * @param text: the text to append
  */
 function writeOnChatHistory(text) {
     let history = document.getElementById('history');
@@ -111,12 +110,15 @@ function hideLoginInterface(room, userId) {
 }
 
 /**
- * saves a message to the indexedDB
- * @param roomNo
- * @param userId
- * @param chatText
+ * called whenever socket.io receives a message (from the current user, or from another)
+ * this will need to be considered if a socket's behaviour is "broadcast"
+ * wrapper to collate relevant data into an object to send to database save function
+ * @param roomNo: room number / room ID
+ * @param userId: user's name / ID
+ * @param chatText: text of the chat message
+ * @returns {Promise<void>}
  */
-function cacheMessage(roomNo, userId, chatText) {
+async function cacheMessage(roomNo, userId, chatText) {
     storeMessageData({
         roomNo: roomNo,
         userId: userId,
@@ -125,7 +127,13 @@ function cacheMessage(roomNo, userId, chatText) {
     });
 }
 
-
+/**
+ * called upon joining a room
+ * repopulates the chat history with messages previously saved at an earlier time
+ * @param room: room name / room ID
+ * @param userId: user's name / ID
+ * @returns {Promise<void>}
+ */
 async function getEntireChatHistory(room, userId) {
     let messages = await getRoomMessages(room);
     messages.forEach(message => {
