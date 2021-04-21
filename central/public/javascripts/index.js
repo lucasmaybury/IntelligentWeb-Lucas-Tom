@@ -14,6 +14,15 @@ function init() {
     document.getElementById('initial_form').style.display = 'block';
     document.getElementById('chat_interface').style.display = 'none';
     initChatSocket();
+    //check for support
+    
+    if ('indexedDB' in window) {
+        initDatabase();
+    }
+    else {
+        alert('This browser doesn\'t support IndexedDB');
+    }
+    //loadData(false);
 }
 
 /**
@@ -35,6 +44,7 @@ function initChatSocket() {
         if (userId === name) {
             // it enters the chat
             hideLoginInterface(room, userId);
+            getEntireChatHistory(room, userId);
         } else {
             // notifies that someone has joined the room
             writeOnChatHistory('<b>' + userId + '</b>' + ' joined room ' + room);
@@ -45,6 +55,7 @@ function initChatSocket() {
         let who = userId
         if (userId === name) who = 'Me';
         writeOnChatHistory('<b>' + who + ':</b> ' + chatText);
+        cacheMessage(roomNo, userId, chatText);
     });
 }
 
@@ -99,3 +110,25 @@ function hideLoginInterface(room, userId) {
     document.getElementById('in_room').innerHTML= ' '+room;
 }
 
+/**
+ * saves a message to the indexedDB
+ * @param roomNo
+ * @param userId
+ * @param chatText
+ */
+function cacheMessage(roomNo, userId, chatText) {
+    storeMessageData({
+        roomNo: roomNo,
+        userId: userId,
+        chatText: chatText,
+        dateTime: Date.now()
+    });
+}
+
+
+async function getEntireChatHistory(room, userId) {
+    let messages = await getRoomMessages(room);
+    messages.forEach(message => {
+        writeOnChatHistory('<b>' + message.userId + ':</b> ' + message.chatText);
+    });
+}
