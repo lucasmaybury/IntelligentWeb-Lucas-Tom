@@ -36,13 +36,13 @@ async function initDatabase(){
                 }
 
                 //Messages:
-                // id, room, user, text
+                // id, room, user, text, datetime
                 if (!upgradeDb.objectStoreNames.contains(MESSAGES_STORE_NAME)) {
                     let sumsDB = upgradeDb.createObjectStore(MESSAGES_STORE_NAME, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    sumsDB.createIndex('roomNo', 'roomNo', {unique: true, multiEntry: true});
+                    sumsDB.createIndex('roomNo', 'roomNo', {unique: false, multiEntry: true});
                 }
 
                 //Annotation:
@@ -85,9 +85,9 @@ async function storeMessageData(messageObject) {
             let store = await tx.objectStore(MESSAGES_STORE_NAME);
             await store.put(messageObject);
             await  tx.complete;
-            console.log('added item to the store! '+ JSON.stringify(messageObject));
+            console.log('added item to the store:'+ JSON.stringify(messageObject));
         } catch(error) {
-            console.log('error: I could not store the element. Reason: '+error);
+            console.error('error storing message:\n'+error);
         };
     }
     else localStorage.setItem(messageObject.id, JSON.stringify(messageObject));
@@ -99,16 +99,17 @@ window.storeMessageData= storeMessageData;
  * @param roomName
  * @returns {Promise<*[]>}
  */
-async function getRoomMessages(room) {
+async function getRoomMessages(roomNo) {
     if (!db)
         await initDatabase();
     if (db) {
         try {
-            console.log('fetching: ' + room);
+            console.log('fetching: ' + roomNo);
             let tx = await db.transaction(MESSAGES_STORE_NAME, 'readonly');
             let store = await tx.objectStore(MESSAGES_STORE_NAME);
-            let index = await store.index('roomNo');
-            let readingsList = await index.getAll();
+            let roomIndex = await store.index('roomNo');
+            let readingsList = await roomIndex.getAll(IDBKeyRange.only(roomNo));
+            readingsList.sort((el1, el2) => el1.dateTime > el2.dateTime);
             await tx.complete;
             return readingsList;
         } catch (error) {
@@ -116,12 +117,7 @@ async function getRoomMessages(room) {
             //alert("unable to get chat history for this room")
         }
     } else {
-        const value = localStorage.getItem(city);
-        let finalResults=[];
-        if (value == null)
-            return finalResults;
-        else finalResults.push(value);
-        return finalResults;
+        alert("Error starting database")
     }
 }
 window.getRoomMessages= getRoomMessages;

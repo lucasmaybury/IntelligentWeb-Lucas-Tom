@@ -119,14 +119,15 @@ function cacheMessage(roomNo, userId, chatText) {
     storeMessageData({
         roomNo: roomNo,
         userId: userId,
-        chatText: chatText
+        chatText: chatText,
+        dateTime: Date.now()
     });
 }
 
 
 async function getEntireChatHistory(room, userId) {
     let messages = await getRoomMessages(room);
-    for(m in messages) {
-        writeOnChatHistory('<b>' + messages[m].userId + ':</b> ' + messages[m].chatText);
-    }
+    messages.forEach(message => {
+        writeOnChatHistory('<b>' + message.userId + ':</b> ' + message.chatText);
+    });
 }
