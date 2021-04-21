@@ -14,22 +14,18 @@
     <h1><%= title %></h1>
     <p>Please insert the id of the Room you want to Join, if you do not have a room id, click Generate Room</p>
     <form onsubmit="return false;">
-        <p><label for="name"> Your name </label>
-            <input type="text" id="name" name="name">
+        <p>
+            <label for="name"> Your name </label>
+            <input type="text" id="name" name="name" value="Lucas">
         </p>
         <p>
             <label for="roomNo"> Your room </label>
-            <input type="text" id="roomNo" name="roomNo">
+            <input type="text" id="roomNo" name="roomNo"  value="A">
             <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
         </p>
         <p style=" width: 100%">
             <label for="image_url"> Image (URL) </label>
-            <input type="text" id="image_url" name="image_url">
-        </p>
-
-        <p class="form-group">
-            <label for="image"> Upload an Image </label>
-            <input type="file" name="image" id="image" accept="image/png, image/jpeg">
+            <input type="text" id="image_url" name="image_url" value="https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg">
         </p>
 
         <button id="connect" onclick="connectToRoom()">Connect</button>
