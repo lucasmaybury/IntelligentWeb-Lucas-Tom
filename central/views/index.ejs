@@ -41,9 +41,9 @@
             <input type="submit" class="btn btn-warning" value="Upload Image">
         </p>
     </form>
-    <form action="/takePhoto">
-                <label for="takeImage"> Take a picture: </label>
-                <button type="submit">Take Picture</button>
+    <form id="takePicForm" method="POST" action="/takePhoto">
+        <label for="takeImage"> Take a picture: </label>
+        <input type="submit" value="Go"/>
     </form>
         <p>
             <label> For your image enter a: </label>

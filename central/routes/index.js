@@ -8,4 +8,8 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Image Browsing' });
 });
 
+router.get('/takePhoto', function(req,res){
+  res.render('takePhoto', null);
+});
+
 module.exports = router;
