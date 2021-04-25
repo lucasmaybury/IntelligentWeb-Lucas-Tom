@@ -80,7 +80,7 @@ function connectToRoom() {
     if (!name) name = 'Unknown-' + Math.random();
     //@todo join the room
     initCanvas(socket, imageUrl);
-    hideLoginInterface(roomNo, name);
+    hideLoginInterface(imageUrl, name);
     chat.emit('create or join', roomNo, name);
 }
 
