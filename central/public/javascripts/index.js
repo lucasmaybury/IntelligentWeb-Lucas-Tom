@@ -140,3 +140,15 @@ async function getEntireChatHistory(room, userId) {
         writeOnChatHistory('<b>' + message.userId + ':</b> ' + message.chatText);
     });
 }
+
+// get web cam function
+
+async function getWebCam(){
+    try{
+        const videoSrc = await navigator.mediaDevices.getUserMedia({video:true});
+        var video = document.getElementById("video");
+        video.srcObject = videoSrc;
+    }catch(e){
+        console.log(e);
+    }
+}
