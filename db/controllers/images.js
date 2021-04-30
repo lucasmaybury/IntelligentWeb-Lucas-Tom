@@ -85,14 +85,15 @@ exports.insert = async function (req, res) {
             title: imageData.title,
             description: imageData.description,
             authorName: imageData.authorName,
-        });
+        }); // create new Image model
 
-        const imageFile = new Buffer.from(imageData.image, 'base64')
-        let fileSave = writeFilePromise(image.path, imageFile)
-        let dbSave = image.save();
+        const imageFile = new Buffer.from(imageData.image, 'base64') // get image data ready for saving
+        let fileSave = writeFilePromise(image.path, imageFile) // start promise to write file
+        let dbSave = image.save(); // start promise to write file
 
-        Promise.all([fileSave,dbSave])
+        Promise.all([fileSave,dbSave]) // wait until file is saved, and database entry is saved
             .then(() => res.status(201).end());
+            // no catch block, as errors are caught by enclosing try/catch block
 
     } catch (err) {
         console.log(err);
