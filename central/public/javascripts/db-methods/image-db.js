@@ -7,7 +7,7 @@
  * @param chatText: text of the chat message
  * @returns {Promise<void>}
  */
-exports.cacheMessage = async function(roomNo, userId, chatText) {
+async function cacheMessage(roomNo, userId, chatText) {
     storeMessageData({
         roomNo: roomNo,
         userId: userId,
@@ -23,7 +23,7 @@ exports.cacheMessage = async function(roomNo, userId, chatText) {
  * @param userId: user's name / ID
  * @returns {Promise<void>}
  */
-exports.getEntireChatHistory = async function(room, userId) {
+async function getEntireChatHistory(room, userId) {
     let messages = await getRoomMessages(room);
     messages.forEach(message => {
         writeOnChatHistory('<b>' + message.userId + ':</b> ' + message.chatText);

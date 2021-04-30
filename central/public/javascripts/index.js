@@ -1,5 +1,3 @@
-const {cacheMessage, getEntireChatHistory} = require('./db-methods/image-db');
-
 let name = null;
 let roomNo = null;
 let socket;
