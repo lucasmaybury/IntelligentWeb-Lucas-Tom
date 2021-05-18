@@ -85,3 +85,7 @@ div.content{
     width: 200px;
     height: 240px;
 }
+
+.cameraBox{
+    position: relative;
+}

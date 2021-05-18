@@ -8,7 +8,7 @@
     <script src="/javascripts/database.js" type="module"></script>
     <script src="/javascripts/index.js"></script>
     <script src="/javascripts/canvas.js"></script>
-    <script src="/javascripts/capture.js"></script>
+    <script src="./javascripts/capture.js"></script>
 </head>
 <body onload="init()">
 
@@ -61,10 +61,11 @@
         <label> Description:  </label>
         <input type="text" id="uploadDesc" name="uploadDesc">
     </p>
-    <p>
-        <label> Capture  </label>
-        <video id="video" autoplay></video>
-        <button id="video" onclick="startup()">Open Camera</button>
+    <p id="cameraBox">
+        <video id="video"autoplay></video>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <button id='camera' onclick="camera()">Open Camera</button>
+        <button id="snap" onclick="snapshot()">Take Snapshot </button>
     </p>
 </div>
 
