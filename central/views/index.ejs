@@ -8,8 +8,11 @@
     <script src="/javascripts/database.js" type="module"></script>
     <script src="/javascripts/index.js"></script>
     <script src="/javascripts/canvas.js"></script>
+    <script src="/javascripts/capture.js"></script>
 </head>
 <body onload="init()">
+
+<!-- Connect to a room  -->
 
 <div class="content" id="initial_form" style="display: block">
     <h1>Sign in By URL</h1>
@@ -33,6 +36,8 @@
     </form>
 </div>
 
+<!-- Upload an Image  -->
+
 <div id="initial_form2" style="display: block">
     <h1>Upload or Take a Picture</h1>
     <form action="/upload" method="POST">
@@ -41,8 +46,6 @@
             <input type="submit" class="btn btn-warning" value="Upload Image">
         </p>
     </form>
-    <label for="takeImage"> Take a picture: </label>
-        <a href="/takePhoto"> Go </a>
     <p>
         <label> For your image enter a: </label>
     </p>
@@ -58,8 +61,18 @@
         <label> Description:  </label>
         <input type="text" id="uploadDesc" name="uploadDesc">
     </p>
+    <p>
+        <label> Capture  </label>
+        <video id="video" autoplay></video>
+        <button id="video" onclick="startup()">Open Camera</button>
+    </p>
 </div>
 
+<!-- Capture Image -->
+
+
+
+<!-- Chat interface  -->
 
 <div id="chat_interface" style="display: none">
     <div>
