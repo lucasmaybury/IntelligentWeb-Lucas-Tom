@@ -61,15 +61,27 @@
         <label> Description:  </label>
         <input type="text" id="uploadDesc" name="uploadDesc">
     </p>
-    <p id="cameraBox">
+    <!--
+    <p>
         <video id="video"autoplay></video>
-        <canvas id="canvas" style="display:none;"></canvas>
+        <canvas id="canvas" width="640" height="480" style="border:1px solid #000000;"></canvas>
         <button id='camera' onclick="camera()">Open Camera</button>
-        <button id="snap" onclick="snapshot()">Take Snapshot </button>
+        <button id="click" onclick="snapshot()">Take Snapshot </button>
     </p>
+    -->
 </div>
 
+<div class="camera">
+    <video id="video">Video stream not available.</video>
+    <button onclick="">Open Camera</button>
+    <button id="start">Take photo</button>
+</div>
+<canvas id="canvas">
+    <img id="photo" alt="The screen capture will appear in this box.">
+</canvas>
+
 <!-- Capture Image -->
+
 
 
 
