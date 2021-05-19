@@ -1,41 +1,4 @@
-/*
-//function that opens the camera
-async function camera(){
-    navigator.mediaDevices.getUserMedia({
-        video: true,
-        height: true
-    }).then(stream => {
-        document.getElementById("video").srcObject = stream;
-    }).catch(console.error)
-
-}
-
-//setting variables for canvas lay over and
-//action listener for the snapshot function
-
-var video = document.querySelector('video');
-var canvas = document.querySelector('canvas');
-var ctx = canvas.getContext('2d');
-
-var localMediaStream = null;
-video.addEventListener('click', snapshot, false);
-
-navigator.getUserMedia({video: true}, function (stream) {
-    video.src = window.URL.createObjectURL(stream);
-    localMediaStream = stream;
-});
-
-// function for snapshot
-
-function snapshot(){
-    if(localMediaStream){
-        ctx.drawImage(video,0,0);
-        document.querySelector('img').src = canvas.toDataURL('image/png');
-    }
-    alert('done');
-}
-
-*/
+//opening camera function
 async function openCamera() {
     // The width and height of the captured photo. We will set the
     // width to the value defined here, but the height will be
