@@ -35,9 +35,8 @@ function snapshot(){
     alert('done');
 }
 
- */
-
-(function openCamera() {
+*/
+async function openCamera() {
     // The width and height of the captured photo. We will set the
     // width to the value defined here, but the height will be
     // calculated based on the aspect ratio of the input stream.
@@ -96,8 +95,6 @@ function snapshot(){
             takepicture();
             ev.preventDefault();
         }, false);
-
-        clear();
     }
 
     // Fill the photo with an indication that none has been
@@ -124,9 +121,9 @@ function snapshot(){
             canvas.width = width;
             canvas.height = height;
             context.drawImage(video, 0, 0, width, height);
-
             var data = canvas.toDataURL('image/png');
             photo.setAttribute('src', data);
+            console.log('Success');
         } else {
             clear();
         }
@@ -134,8 +131,8 @@ function snapshot(){
 
     // Set up our event listener to run the startup process
     // once loading is complete.
-    window.addEventListener('load', startup, false);
-})();
+   window.addEventListener('click', startup, false);
 
+};
 
 
