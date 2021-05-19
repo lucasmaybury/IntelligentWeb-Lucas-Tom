@@ -9,6 +9,7 @@
     <script src="/javascripts/index.js"></script>
     <script src="/javascripts/canvas.js"></script>
     <script src="./javascripts/capture.js"></script>
+    <script src="./javascripts/fileUpload.js"></script>
 </head>
 <body onload="init()">
 
@@ -37,15 +38,17 @@
 </div>
 
 <!-- Upload an Image  -->
-
 <div id="initial_form2" style="display: block">
     <h1>Upload or Take a Picture</h1>
-    <form action="/upload" method="POST">
-        <p><label for="myImage"> Choose a file </label>
+
+    <form onsubmit="return false">
+        <p>
+            <label for="myImage"> Choose a file </label>
             <input type="file" id="myFile" name="myImage">
-            <input type="submit" class="btn btn-warning" value="Upload Image">
+            <button id="uploadButton" onclick="saveFile()">Upload</button>
         </p>
     </form>
+
     <p>
         <label> For your image enter a: </label>
     </p>
@@ -61,19 +64,21 @@
         <label> Description:  </label>
         <input type="text" id="uploadDesc" name="uploadDesc">
     </p>
-
-    <!-- Capture Image -->
-
-    <div class="camera">
-        <video id="video">Video stream not available.</video>
-        <button id="button" onclick="openCamera()">Open Camera</button>
-        <button id="start">Take photo</button>
-    </div>
-    <canvas id="canvas">
-        <img id="photo">
-    </canvas>
-
 </div>
+
+<!-- Capture Image -->
+<section class="photo">
+    <div>
+        <div class="camera">
+            <video id="video">Video stream not available.</video>
+            <button id="button" onclick="openCamera()">Open Camera</button>
+            <button id="start">Take photo</button>
+        </div>
+        <canvas id="canvas">
+            <img id="photo">
+        </canvas>
+    </div>
+</section>
 
 
 
