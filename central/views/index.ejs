@@ -9,107 +9,103 @@
     <script src="/javascripts/index.js"></script>
     <script src="/javascripts/canvas.js"></script>
     <script src="./javascripts/capture.js"></script>
-    <script src="./javascripts/fileUpload.js"></script>
 </head>
 <body onload="init()">
 
 <!-- Connect to a room  -->
-
-<div class="content" id="initial_form" style="display: block">
-    <h1>Sign in By URL</h1>
-    <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
-    <form onsubmit="return false;">
-        <p>
-            <label for="name"> Your name </label>
-            <input type="text" id="name" name="name" value="Lucas">
-        </p>
-        <p>
-            <label for="roomNo"> Your room </label>
-            <input type="text" id="roomNo" name="roomNo"  value="A">
-            <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
-        </p>
-        <p style=" width: 100%">
-            <label for="image_url"> Image (URL) </label>
-            <input type="text" id="image_url" name="image_url" value="https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg">
-        </p>
-
-        <button id="connect" onclick="connectToRoom()">Connect</button>
-    </form>
-</div>
-
-<!-- Upload an Image  -->
-<div id="initial_form2" style="display: block">
-    <h1>Upload or Take a Picture</h1>
-
-    <form onsubmit="return false">
-        <p>
-            <label for="myImage"> Choose a file </label>
-            <input type="file" id="myFile" name="myImage">
-            <button id="uploadButton" onclick="saveFile()">Upload</button>
-        </p>
-    </form>
-
-    <p>
-        <label> For your image enter a: </label>
-    </p>
-    <p>
-        <label> Name:  </label>
-        <input type="text" id="uploadName" name="uploadName">
-    </p>
-    <p>
-        <label> Title:  </label>
-        <input type="text" id="uploadTitle" name="uploadTitle">
-    </p>
-    <p>
-        <label> Description:  </label>
-        <input type="text" id="uploadDesc" name="uploadDesc">
-    </p>
-</div>
-
-<!-- Capture Image -->
-<section class="photo">
-    <div>
-        <div class="camera">
-            <video id="video">Video stream not available.</video>
-            <button id="button" onclick="openCamera()">Open Camera</button>
-            <button id="start">Take photo</button>
-        </div>
-        <canvas id="canvas">
-            <img id="photo">
-        </canvas>
-    </div>
-</section>
-
-
-
-
-
-
-
-
-<!-- Chat interface  -->
-
-<div id="chat_interface" style="display: none">
-    <div>
-    <p><div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
-    </div>
-    </p>
-    <div style="width: 100%; height: 50vh">
-            <img id="image" height="100%" >
-            <canvas  id="canvas" ></canvas>
-    </div>
-<!--    </div>-->
-    <div id="history" style="height: 35vh" class="boxed scrolling" ></div>
-    <div id="input" style="height: 5vh" class=" boxed">
-        <form onsubmit="return false;" style="width: 100%">
+    <div class="content" id="initial_form" style="display: block">
+        <h1>Sign in By URL</h1>
+        <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
+        <!--<form id="form1" onsubmit="return false;">-->
             <p>
-                <label for="name"> chat: </label>
-                <input type="text" id="chat_input" name="chat_input" style="width: 80%">
-                <button id="news_send" onclick="sendChatText()">Send</button>
+                <label for="name"> Your name </label>
+                <input type="text" id="name1" name="name" value="Lucas">
+            </p>
+             <p>
+                <label for="roomNo"> Your room </label>
+                <input type="text" id="roomNo" name="roomNo"  value="A">
+                <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
+            </p>
+            <p style=" width: 100%">
+                <label for="image_url"> Image (URL) </label>
+                <input type="text" id="image_url" name="image_url" value="https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg">
+            </p>
+            <button id="connect" onclick="connectToRoom()">Connect</button>
+        </form>
+    </div>
+
+
+<!-- Upload an Image -->
+
+    <div id="initial_form2" style="display: block">
+        <h1>Upload or Take a Picture</h1>
+        <form id="form" onsubmit="onSubmit()">
+            <input type="submit" value="Submit" id="upload">
+            <p>
+                <label for="myImage"> Choose a file </label>
+                <input type="file" id="image" name="image">
+            </p>
+            <p><label> For your image enter a: </label> </p>
+            <p>
+                <label> Name:  </label>
+                <input type="text" id="name" name="name">
+            </p>
+            <p>
+                <label> Title:</label>
+                <input type="text" id="title" name="title">
+            </p>
+            <p>
+                <label> Description:  </label>
+                <input type="text" id="description" name="description">
+            </p>
+            <p>
+                <label> Author Name:  </label>
+                <input type="text" id="authorName" name="authorName">
             </p>
         </form>
     </div>
-</div>
-<div class="offline_div" id="offline_div" style="display: none">You are offline</div>
+
+
+<!-- Capture Image
+
+    <section class="photo">
+        <div>
+            <div class="camera">
+                <video id="video">Video stream not available.</video>
+                <button id="button" onclick="openCamera()">Open Camera</button>
+                <button id="start">Take photo</button>
+            </div>
+            <canvas id="canvas">
+                <img id="photo">
+            </canvas>
+        </div>
+    </section>
+-->
+<!-- Chat interface  -->
+
+    <div id="chat_interface" style="display: none">
+        <div>
+            <p>
+            <div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
+        </div>
+            </p>
+        <div style="width: 100%; height: 50vh">
+            <img id="image" height="100%" >
+            <canvas  id="canvas" ></canvas>
+        </div>
+    <!--    </div>-->
+        <div id="history" style="height: 35vh" class="boxed scrolling" ></div>
+        <div id="input" style="height: 5vh" class=" boxed">
+            <form onsubmit="return false;" style="width: 100%">
+                <p>
+                    <label for="name"> chat: </label>
+                    <input type="text" id="chat_input" name="chat_input" style="width: 80%">
+                    <button id="news_send" onclick="sendChatText()">Send</button>
+                </p>
+            </form>
+        </div>
+    </div>
+        <div class="offline_div" id="offline_div" style="display: none">You are offline</div>
+
 </body>
 </html>

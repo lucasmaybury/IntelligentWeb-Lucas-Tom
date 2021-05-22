@@ -104,6 +104,7 @@ function writeOnChatHistory(text) {
 function hideLoginInterface(room, userId) {
     document.getElementById('initial_form').style.display = 'none';
     document.getElementById('initial_form2').style.display = 'none';
+    //hide capture image buttons
     document.getElementById('chat_interface').style.display = 'block';
     document.getElementById('who_you_are').innerHTML= userId;
     document.getElementById('in_room').innerHTML= ' '+room;
@@ -141,14 +142,48 @@ async function getEntireChatHistory(room, userId) {
     });
 }
 
-// get web cam function
 
-async function getWebCam(){
-    try{
-        const videoSrc = await navigator.mediaDevices.getUserMedia({video:true});
-        var video = document.getElementById("video");
-        video.srcObject = videoSrc;
-    }catch(e){
-        console.log(e);
+//ajax
+
+function onSubmit(){
+    // The .serializeArray() method creates a JavaScript array of objects
+    // https://api.jquery.com/serializearray/
+    const formArray= $("form").serializeArray();
+    const data={};
+    for (let index in formArray){
+        data[formArray[index].name]= formArray[index].value;
     }
+    // const data = JSON.stringify($(this).serializeArray());
+    console.log(data);
+    sendAjaxQuery('/image', data);
+    // prevent the form from reloading the page (normal behaviour for forms)
+    event.preventDefault()
+    console.log("success");
+}
+
+function sendAjaxQuery(url, data) {
+    $.ajax({
+        url: url ,
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        dataType: 'json',
+        type: 'POST',
+        success: function (dataR) {
+            // no need to JSON parse the result, as we are using
+            // dataType:json, so JQuery knows it and unpacks the
+            // object for us before returning it
+            // in order to have the object printed by alert
+            // we need to JSON.stringify the object
+            document.getElementById('results').innerHTML= JSON.stringify(dataR);
+        },
+        error: function (response) {
+            // the error structure we passed is in the field responseText
+            // it is a string, even if we returned as JSON
+            // if you want o unpack it you must do:
+            // const dataR= JSON.parse(response.responseText)
+            alert (response.responseText);
+            console.log(response);
+        }
+    });
+
 }

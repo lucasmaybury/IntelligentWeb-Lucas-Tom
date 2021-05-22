@@ -50,7 +50,7 @@ div.content{
 
 #initial_form2{
     background-color: mintcream;
-    height:320px;
+    height:350px;
     width:475px;
     border:2px solid #000000;
     float:left;
@@ -89,4 +89,6 @@ div.content{
 .photo{
     text-align: center;
     float: right;
+    padding-right: 320px;
+
 }
