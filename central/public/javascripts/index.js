@@ -104,7 +104,8 @@ function writeOnChatHistory(text) {
 function hideLoginInterface(room, userId) {
     document.getElementById('initial_form').style.display = 'none';
     document.getElementById('initial_form2').style.display = 'none';
-    //hide capture image buttons
+    document.getElementById('start').style.display = 'none';
+    document.getElementById('camera_button').style.display = 'none';
     document.getElementById('chat_interface').style.display = 'block';
     document.getElementById('who_you_are').innerHTML= userId;
     document.getElementById('in_room').innerHTML= ' '+room;
