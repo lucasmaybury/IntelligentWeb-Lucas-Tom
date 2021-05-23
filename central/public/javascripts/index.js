@@ -75,10 +75,11 @@ function sendChatText() {
  */
 function connectToRoom() {
     roomNo = document.getElementById('roomNo').value;
-    name = document.getElementById('name').value;
-    let imageUrl= document.getElementById('image_url').value;
+    name = document.getElementById('room_name').value;
+    let imageUrl = document.getElementById('image_url').value;
+    //console.log(imageUrl);
     if (!name) name = 'Unknown-' + Math.random();
-    //@todo join the room
+    //@todo join t he room
     initCanvas(socket, imageUrl);
     hideLoginInterface(imageUrl, name);
     chat.emit('create or join', roomNo, name);

@@ -22,7 +22,7 @@ async function openCamera() {
 
     function startup() {
         video = document.getElementById('video');
-        canvas = document.getElementById('canvas');
+        canvas = document.getElementById('camera_Canvas');
         photo = document.getElementById('photo');
         start = document.getElementById('start');
 
