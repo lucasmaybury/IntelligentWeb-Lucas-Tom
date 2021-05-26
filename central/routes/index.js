@@ -15,7 +15,6 @@ router.post('/', function (req, res, next) {
   let description = req.body.description;
   let authorName = req.body.authorName;
   let image = req.body.image;
-
 });
 
 module.exports = router;

@@ -86,8 +86,10 @@ div.content{
     height: 240px;
 }
 
-.photo{
-    text-align: center;
-    float: right;
-    padding-right: 320px;
+#photo{
+    position: absolute;
+    left: 60%;
+}
+#taken_photo{
+
 }
