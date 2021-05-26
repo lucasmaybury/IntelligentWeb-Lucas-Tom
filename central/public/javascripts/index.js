@@ -115,6 +115,14 @@ function hideLoginInterface(room, userId) {
     document.getElementById('in_room').innerHTML= ' '+room;
 }
 
+function base64Image(image){
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(image);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
 
 
 
@@ -123,6 +131,11 @@ function hideLoginInterface(room, userId) {
 function onSubmit(){
     // The .serializeArray() method creates a JavaScript array of objects
     // https://api.jquery.com/serializearray/
+    //base 64 the image
+    var image = document.querySelector('#image').value
+    var image2 = base64Image(image);
+    console.log(image2);
+
     const formArray= $("#image-form").serializeArray();
     const data={};
     for (let index in formArray){
