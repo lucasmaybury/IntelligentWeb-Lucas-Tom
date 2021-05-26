@@ -83,6 +83,7 @@ function connectToRoom() {
     initCanvas(socket, imageUrl);
     hideLoginInterface(imageUrl, name);
     chat.emit('create or join', roomNo, name);
+    event.preventDefault();
 }
 
 /**
@@ -120,7 +121,7 @@ function hideLoginInterface(room, userId) {
 function onSubmit(){
     // The .serializeArray() method creates a JavaScript array of objects
     // https://api.jquery.com/serializearray/
-    const formArray= $("form").serializeArray();
+    const formArray= $("#image-form").serializeArray();
     const data={};
     for (let index in formArray){
         data[formArray[index].name]= formArray[index].value;
@@ -129,8 +130,7 @@ function onSubmit(){
     console.log(data);
     sendAjaxQuery('/image', data);
     // prevent the form from reloading the page (normal behaviour for forms)
-    event.preventDefault()
-    console.log("success");
+    event.preventDefault();
 }
 
 function sendAjaxQuery(url, data) {

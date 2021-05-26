@@ -29,7 +29,14 @@ exports.sendImageToClient = function (req, res) {
 /**
  * endpoint that accepts image data from the browser,
  * and sends a request to the database server to save it into the database
- * @param req: contains an image object to be saved to the database
+ * @param req:
+ * {
+     name: string,
+     title: string,
+     description: string,
+     authorName: string,
+     image: string - base64 image
+   }
  * @param res
  * responds with a 201 code on success, or an error
  */

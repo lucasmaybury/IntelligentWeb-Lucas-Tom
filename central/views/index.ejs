@@ -17,7 +17,7 @@
     <div class="content" id="initial_form" style="display: block">
         <h1>Sign in By URL</h1>
         <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
-        <form id="form" onsubmit="return false;">
+        <form id="connect-form" onsubmit="connectToRoom()">
             <p>
                 <label for="name"> Your name </label>
                 <input type="text" id="room_name" name="name" value="Lucas">
@@ -31,7 +31,8 @@
                 <label for="image_url"> Image (URL) </label>
                 <input type="text" id="image_url" name="image_url" value="https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg">
             </p>
-            <button id="connect" onclick="connectToRoom()">Connect</button>
+
+            <input type="submit" value="Connect" id="connect">
         </form>
     </div>
 
@@ -41,8 +42,7 @@
 
     <div id="initial_form2" style="display: block">
         <h1>Upload or Take a Picture</h1>
-        <form id="form" onsubmit="onSubmit()">
-            <input type="submit" value="Submit" id="upload">
+        <form id="image-form" onsubmit="onSubmit()">
             <p>
                 <label for="myImage"> Choose a file </label>
                 <input type="file" id="image" name="image">
@@ -64,6 +64,8 @@
                 <label> Author Name:  </label>
                 <input type="text" id="authorName" name="authorName">
             </p>
+
+            <input type="submit" value="Submit" id="upload">
         </form>
     </div>
 
