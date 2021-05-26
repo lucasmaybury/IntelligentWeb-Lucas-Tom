@@ -3,7 +3,6 @@ let roomNo = null;
 let socket;
 let chat = io.connect('/chat');
 
-
 /**
  * called by <body onload>
  * it initialises the interface and the expected socket messages
@@ -79,10 +78,11 @@ function connectToRoom() {
     let imageUrl = document.getElementById('image_url').value;
     //console.log(imageUrl);
     if (!name) name = 'Unknown-' + Math.random();
-    //@todo join t he room
+
     initCanvas(socket, imageUrl);
     hideLoginInterface(imageUrl, name);
     chat.emit('create or join', roomNo, name);
+    images.emit('create or join', roomNo, name);
     event.preventDefault();
 }
 
@@ -115,11 +115,7 @@ function hideLoginInterface(room, userId) {
     document.getElementById('in_room').innerHTML= ' '+room;
 }
 
-
-
-
 //ajax
-
 function onSubmit(){
     // The .serializeArray() method creates a JavaScript array of objects
     // https://api.jquery.com/serializearray/

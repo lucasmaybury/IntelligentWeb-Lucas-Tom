@@ -5,43 +5,45 @@ exports.init = function(io) {
      */
     const chat = io.of("/chat").on("connection", (socket) => {
         try {
-            /**
-             * it creates or joins a room
-             */
+            // creates or joins a room
             socket.on('create or join', function (room, userId) {
                 socket.join(room);
                 chat.to(room).emit('joined', room, userId);
             });
 
+            // sends a chat message to the room
             socket.on('chat', (room, userId, chatText) => {
                 chat.to(room).emit('chat', room, userId, chatText);
             });
 
+            // disconnects from a room
             socket.on('disconnect', function(){
                 console.log('someone disconnected');
             });
-
-        } catch (e) {
-
-        }
+        } catch (e) { }
     });
 
     /**
-     * The images namespace for handling drawing and canvas activities betweeen clients
+     * The images namespace for handling drawing and canvas activities between clients
      */
-    const images = io.of("/images").on("connection",  (socket) => {
+    const images = io.of("/images").on("connection", (socket) => {
         try {
-            // Enroll in a room
-            socket.on("enrol", (room) => {
+            // creates or joins a room
+            socket.on('create or join', function (room, userId) {
                 socket.join(room);
+                images.to(room).emit('joined', room, userId);
             });
-            // Drawing on canvas
-            socket.on("drawing", (room, user, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness) => {
-                images.to(room).emit("draw", user, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
+
+            // drawing on canvas
+            socket.on('drawing', (room, userId, canvasWidth, canvasHeight,
+                                  prevX, prevY, currX, currY, color, thickness) => {
+                images.to(room).emit('drawing', room, userId, canvasWidth, canvasHeight,
+                                                prevX, prevY, currX, currY, color, thickness);
             });
-            // Clearing the canvas
-            socket.on("clear", (room, user) => {
-                images.to(room).emit("clear", user);
+
+            // clearing the canvas
+            socket.on('clear', (room) => {
+                images.to(room).emit('clear');
             });
         } catch (e) {}
     });
