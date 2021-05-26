@@ -117,7 +117,6 @@ function hideLoginInterface(room, userId) {
 
 function base64Image(image){
     return new Promise((resolve, reject) => {
-        console.log('hi')
         const reader = new FileReader();
         reader.readAsDataURL(image);
         reader.onload = () => resolve(reader.result);
@@ -144,6 +143,7 @@ function onSubmit(){
     sendAjaxQuery('/image', data);
     // prevent the form from reloading the page (normal behaviour for forms)
     event.preventDefault();
+
 }
 
 function sendAjaxQuery(url, data) {
@@ -170,5 +170,4 @@ function sendAjaxQuery(url, data) {
             console.log(response);
         }
     });
-
 }

@@ -42,7 +42,7 @@
 
     <div id="initial_form2" style="display: block">
         <h1>Upload or Take a Picture</h1>
-        <form id="image-form" onsubmit="onSubmit()">
+        <form id="image-form" onsubmit="onSubmit()" method="POST">
             <p>
                 <label for="myImage"> Choose a file </label>
                 <input type="file" id="image" name="image">
@@ -64,10 +64,10 @@
                 <label> Author Name:  </label>
                 <input type="text" id="authorName" name="authorName" value="AuthorTest">
             </p>
-
             <input type="submit" value="Submit" id="upload">
         </form>
     </div>
+
 
 <!-- Take photo-->
     <div class="photo">
