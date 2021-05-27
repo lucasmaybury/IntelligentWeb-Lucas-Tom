@@ -139,21 +139,24 @@ async function onSubmit(){
     // The .serializeArray() method creates a JavaScript array of objects
     // https://api.jquery.com/serializearray/
     //form data
-    console.log(cameraImage);
+
 
     const formArray= $("#image-form").serializeArray();
     const data={};
     for (let index in formArray){
         data[formArray[index].name]= formArray[index].value;
     }
+    console.log(data);
+    data.image = cameraImage;
 
+    /*
     //base 64 the image
     var image = document.querySelector('#image').files[0];
     data.image = await base64Image(image)
         .catch(err => {
             console.log(err)
             alert(err)
-        })
+        })*/
 
     // const data = JSON.stringify($(this).serializeArray());
     //console.log(data);
