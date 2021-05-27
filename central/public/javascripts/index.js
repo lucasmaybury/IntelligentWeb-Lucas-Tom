@@ -71,9 +71,9 @@ function initChatSocket() {
  * and sends the message via  socket
  */
 function sendChatText() {
-    let chatText = $('#chat_input');
-    console.log(chatText.value);
-    chat.emit('chat', roomNo, name, chatText.value);
+    let chatText = document.getElementById('chat_input').value;
+    console.log(chatText);
+    chat.emit('chat', roomNo, name, chatText);
 }
 
 /**
