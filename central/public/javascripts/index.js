@@ -74,7 +74,7 @@ function sendChatText() {
  */
 function connectToRoom() {
     roomNo = document.getElementById('roomNo').value;
-    name = document.getElementById('room_name').value;
+    name = document.getElementById('name').value;
     let imageUrl = document.getElementById('image_url').value;
     //console.log(imageUrl);
     if (!name) name = 'Unknown-' + Math.random();
