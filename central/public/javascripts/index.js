@@ -2,7 +2,7 @@ let name = null;
 let roomNo = null;
 let socket;
 let chat = io.connect('/chat');
-let cameraImage;
+let cameraImage = null;
 
 /**
  * called by <body onload>
@@ -146,17 +146,20 @@ async function onSubmit(){
     for (let index in formArray){
         data[formArray[index].name]= formArray[index].value;
     }
-    console.log(data);
-    data.image = cameraImage;
 
-    /*
-    //base 64 the image
-    var image = document.querySelector('#image').files[0];
-    data.image = await base64Image(image)
-        .catch(err => {
-            console.log(err)
-            alert(err)
-        })*/
+    if (cameraImage != null){
+        console.log('Saving Camera Image');
+        data.image = cameraImage;
+    } else {
+        //base 64 the image
+        console.log('Saving Upload Image')
+        var image = document.querySelector('#image').files[0];
+        data.image = await base64Image(image)
+            .catch(err => {
+                console.log(err)
+                alert(err)
+            })
+    }
 
     // const data = JSON.stringify($(this).serializeArray());
     //console.log(data);
