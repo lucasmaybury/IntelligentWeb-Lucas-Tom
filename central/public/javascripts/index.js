@@ -72,7 +72,6 @@ function initChatSocket() {
  */
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
-    console.log(chatText);
     chat.emit('chat', roomNo, name, chatText);
 }
 
@@ -98,7 +97,6 @@ function connectToRoom() {
  * @param text: the text to append
  */
 function writeOnChatHistory(text) {
-    console.log("writing chat history from indexedDB")
     let history = document.getElementById('history');
     let paragraph = document.createElement('p');
     paragraph.innerHTML = text;
