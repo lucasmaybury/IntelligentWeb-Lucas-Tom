@@ -23,7 +23,7 @@ const getImageData = function(imagePath){
  */
 let writeFilePromise = (path, file) => new Promise((resolve, reject) => {
     fs.writeFile(path, file, (err) => {
-        if(err) reject();
+        if(err) reject(err);
         resolve();
     });
 })
@@ -93,7 +93,11 @@ exports.insert = async function (req, res) {
         let dbSave = image.save(); // start promise to write file
 
         Promise.all([fileSave,dbSave]) // wait until file is saved, and database entry is saved
-            .then(() => res.status(201).end());
+            .then(() => res.status(201).end())
+            .catch(err => {
+                console.log(err);
+                res.status(500).send('error '+ err);
+            });
             // no catch block, as errors are caught by enclosing try/catch block
 
     } catch (err) {
@@ -101,19 +105,3 @@ exports.insert = async function (req, res) {
         res.status(500).send('error '+ err);
     }
 }
-
-
-// getdata()
-//     .then(data => {
-//         functionThatMightThrow(data);
-//     })
-//
-//     .catch(error => {
-//         // One option (more noisy than console.log):
-//         console.error(error);
-//         // Another option:
-//         notifyUserOfError(error);
-//         // Another option:
-//         reportErrorToService(error);
-//         // OR do all three!
-//     });

@@ -22,6 +22,13 @@ function init() {
     else {
         alert('This browser doesn\'t support IndexedDB');
     }
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('./serviceWorker.js')
+            .then(function() { console.log('Service Worker Registered'); });
+    }
+
     //loadData(false);
 }
 
@@ -77,11 +84,10 @@ function connectToRoom() {
     roomNo = document.getElementById('roomNo').value;
     name = document.getElementById('name').value;
     let imageUrl = document.getElementById('image_url').value;
-    //console.log(imageUrl);
     if (!name) name = 'Unknown-' + Math.random();
 
     initCanvas(socket, imageUrl);
-    hideLoginInterface(imageUrl, name);
+    hideLoginInterface(roomNo, name);
     chat.emit('create or join', roomNo, name);
     images.emit('create or join', roomNo, name);
     event.preventDefault();
