@@ -41,23 +41,23 @@ async function initDatabase(){
                 }
 
                 //Messages:
-                // id, room, user, text, datetime
+                // id, roomId, user, text, datetime
                 if (!upgradeDb.objectStoreNames.contains(MESSAGES_STORE_NAME)) {
                     let sumsDB = upgradeDb.createObjectStore(MESSAGES_STORE_NAME, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    sumsDB.createIndex('roomNo', 'roomNo', {unique: false, multiEntry: true});
+                    sumsDB.createIndex('roomId', 'roomId', {unique: false, multiEntry: true});
                 }
 
                 //Annotation:
-                // tbd
+                // roomId, userId, canvasHeight, x1, y21, x2, y2, color, thickness
                 if (!upgradeDb.objectStoreNames.contains(ANNOTATIONS_STORE_NAME)) {
                     let sumsDB = upgradeDb.createObjectStore(ANNOTATIONS_STORE_NAME, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    sumsDB.createIndex('id', 'id', {unique: true, multiEntry: true});
+                    sumsDB.createIndex('roomId', 'roomId', {unique: true, multiEntry: true});
                 }
 
                 //Transitions:
@@ -75,6 +75,11 @@ async function initDatabase(){
     }
 }
 window.initDatabase= initDatabase;
+
+
+/**
+ * CHAT MESSAGES
+ */
 
 /**
  * saves a message received from socket.io (or elsewhere) to the indexedDB
@@ -96,26 +101,25 @@ async function storeMessageData(messageObject) {
             console.error('error storing message:\n'+error);
         };
     }
-    else localStorage.setItem(messageObject.id, JSON.stringify(messageObject)); //XXXXXXXXXXX maybe remove this XXXXXXXXXXXXX
 }
 window.storeMessageData= storeMessageData;
 
 /**
  * Gets all cached messages
- * @param roomNo: the name of the room that the message was sent to
+ * @param roomId: the name of the room that the message was sent to
  * @returns {Promise<message object>}: a promise with the value of a collection of messages
  */
-async function getRoomMessages(roomNo) {
+async function getRoomMessages(roomId) {
     if (!db)
         await initDatabase();
     if (db) {
         try {
-            console.log('fetching: ' + roomNo);
+            console.log('fetching: ' + roomId);
             let tx = await db.transaction(MESSAGES_STORE_NAME, 'readonly'); //init transaction
             let store = await tx.objectStore(MESSAGES_STORE_NAME); //init store
-            let roomIndex = await store.index('roomNo'); //init room index
-            let readingsList = await roomIndex.getAll(IDBKeyRange.only(roomNo));
-            //get all rooms where the roomNo is the same as the requested value
+            let roomIndex = await store.index('roomId'); //init room index
+            let readingsList = await roomIndex.getAll(IDBKeyRange.only(roomId));
+            //get all rooms where the roomId is the same as the requested value
             readingsList.sort((el1, el2) => el1.dateTime > el2.dateTime);
             //sort the values in javascript (performing this in indexedDB is possible but would take some work)
             await tx.complete; //end transaction

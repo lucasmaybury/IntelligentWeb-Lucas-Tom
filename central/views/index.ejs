@@ -6,6 +6,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/javascripts/db-methods/chat-db.js"></script>
+    <script src="/javascripts/db-methods/annotation-db.js"></script>
     <script src="/javascripts/database.js" type="module"></script>
     <script src="/javascripts/index.js"></script>
     <script src="/javascripts/canvas.js"></script>
@@ -19,13 +20,13 @@
         <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
         <form id="connect-form" onsubmit="connectToRoom()">
             <p>
-                <label for="name"> Your name </label>
-                <input type="text" id="name" name="name">
+                <label for="userId"> Your name </label>
+                <input type="text" id="userId" name="userId">
             </p>
              <p>
-                <label for="roomNo"> Your room </label>
-                <input type="text" id="roomNo" name="roomNo"  value="A">
-                <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
+                <label for="roomId"> Your room </label>
+                <input type="text" id="roomId" name="roomId"  value="A">
+                <button id="roomIdGenerator" onclick="generateRoom()">Generate Room</button>
             </p>
             <p style=" width: 100%">
                 <label for="image_url"> Image (URL) </label>
@@ -97,7 +98,7 @@
         </div>
 
     <!--    </div>-->
-        <div id="history" style="height: 35vh" class="boxed scrolling" ></div>
+        <div id="history" style="height: 35vh" class="boxed scrolling"></div>
         <div id="input" style="height: 5vh" class=" boxed">
             <form onsubmit="return false;" style="width: 100%">
                 <p>

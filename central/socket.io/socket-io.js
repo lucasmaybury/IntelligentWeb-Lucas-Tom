@@ -6,15 +6,15 @@ exports.init = function(io) {
     const chat = io.of("/chat").on("connection", (socket) => {
         try {
             // creates or joins a room
-            socket.on('create or join', function (room, userId) {
-                socket.join(room);
-                chat.to(room).emit('joined', room, userId);
+            socket.on('create or join', function (roomId, userId) {
+                socket.join(roomId);
+                chat.to(roomId).emit('joined', roomId, userId);
             });
 
-            // sends a chat message to the room
-            socket.on('chat', (room, userId, chatText) => {
-                console.log(room, userId, chatText)
-                chat.to(room).emit('chat', room, userId, chatText);
+            // sends a chat message to the roomId
+            socket.on('chat', (roomId, userId, chatText) => {
+                console.log(roomId, userId, chatText)
+                chat.to(roomId).emit('chat', roomId, userId, chatText);
             });
 
             // disconnects from a room
@@ -30,21 +30,21 @@ exports.init = function(io) {
     const images = io.of("/images").on("connection", (socket) => {
         try {
             // creates or joins a room
-            socket.on('create or join', function (room, userId) {
-                socket.join(room);
-                images.to(room).emit('joined', room, userId);
+            socket.on('create or join', function (roomId, userId) {
+                socket.join(roomId);
+                images.to(roomId).emit('joined', roomId, userId);
             });
 
             // drawing on canvas
-            socket.on('drawing', (room, userId, canvasWidth, canvasHeight,
+            socket.on('drawing', (roomId, userId, canvasWidth, canvasHeight,
                                   prevX, prevY, currX, currY, color, thickness) => {
-                images.to(room).emit('drawing', room, userId, canvasWidth, canvasHeight,
+                socket.broadcast.to(roomId).emit('drawing', roomId, userId, canvasWidth, canvasHeight,
                                                 prevX, prevY, currX, currY, color, thickness);
             });
 
             // clearing the canvas
-            socket.on('clear', (room) => {
-                images.to(room).emit('clear');
+            socket.on('clear', (roomId) => {
+                socket.broadcast.to(roomId).emit('clear');
             });
         } catch (e) {}
     });

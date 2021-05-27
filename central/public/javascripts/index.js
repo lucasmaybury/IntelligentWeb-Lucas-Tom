@@ -1,5 +1,5 @@
-let name = null;
-let roomNo = null;
+let userId = null;
+let roomId = null;
 let socket;
 let chat = io.connect('/chat');
 let cameraImage = null
@@ -38,8 +38,8 @@ function init() {
  * so to make sure that the room number is not accidentally repeated across uses
  */
 function generateRoom() {
-    roomNo = Math.round(Math.random() * 10000);
-    document.getElementById('roomNo').value = 'R' + roomNo;
+    roomId = Math.round(Math.random() * 10000);
+    document.getElementById('roomNo').value = 'R' + roomId;
 }
 
 /**
@@ -47,22 +47,22 @@ function generateRoom() {
  */
 function initChatSocket() {
     // called when someone joins the room. If it is someone else it notifies the joining of the room
-    chat.on('joined', function (room, userId) {
-        if (userId === name) {
+    chat.on('joined', function (roomId, sender) {
+        if (sender === userId) {
             // it enters the chat
-            hideLoginInterface(room, userId);
-            getEntireChatHistory(room, userId);
+            hideLoginInterface(roomId, userId);
+            getEntireChatHistory(roomId, userId);
         } else {
             // notifies that someone has joined the room
-            writeOnChatHistory('<b>' + userId + '</b>' + ' joined room ' + room);
+            writeOnChatHistory('<b>' + userId + '</b>' + ' joined room ' + roomId);
         }
     });
     // called when a message is received
-    chat.on('chat', function (room, userId, chatText) {
+    chat.on('chat', function (roomId, sender, chatText) {
         let who = userId
-        if (userId === name) who = 'Me';
+        if (sender === userId) who = 'Me';
         writeOnChatHistory('<b>' + who + ':</b> ' + chatText); //writes message to screen
-        cacheMessage(roomNo, userId, chatText); //saves message to indexedDB
+        cacheMessage(roomId, userId, chatText); //saves message to indexedDB
     });
 }
 
@@ -73,23 +73,23 @@ function initChatSocket() {
  */
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
-    chat.emit('chat', roomNo, name, chatText);
+    chat.emit('chat', roomId, userId, chatText);
 }
 
 /**
- * used to connect to a room. It gets the user name and room number from the
+ * used to connect to a room. It gets the userId and room number from the
  * interface
  */
 function connectToRoom() {
-    roomNo = document.getElementById('roomNo').value;
-    name = document.getElementById('name').value;
+    roomId = document.getElementById('roomId').value;
+    userId = document.getElementById('userId').value;
     let imageUrl = document.getElementById('image_url').value;
-    if (!name) name = 'Unknown-' + Math.random();
+    if (!userId) userId = 'Unknown-' + Math.random();
 
     initCanvas(socket, imageUrl);
-    hideLoginInterface(roomNo, name);
-    chat.emit('create or join', roomNo, name);
-    images.emit('create or join', roomNo, name);
+    hideLoginInterface(roomId, userId);
+    chat.emit('create or join', roomId, userId);
+    images.emit('create or join', roomId, userId);
     event.preventDefault();
 }
 
@@ -107,10 +107,10 @@ function writeOnChatHistory(text) {
 
 /**
  * it hides the initial form and shows the chat
- * @param room the selected room
- * @param userId the user name
+ * @param roomId the selected room
+ * @param userId the user userId
  */
-function hideLoginInterface(room, userId) {
+function hideLoginInterface(roomId, userId) {
     document.getElementById('initial_form').style.display = 'none';
     document.getElementById('initial_form2').style.display = 'none';
     document.getElementById('start').style.display = 'none';
@@ -119,7 +119,7 @@ function hideLoginInterface(room, userId) {
     document.getElementById('video').style.display = 'none';
     document.getElementById('chat_interface').style.display = 'block';
     document.getElementById('who_you_are').innerHTML= userId;
-    document.getElementById('in_room').innerHTML= ' '+room;
+    document.getElementById('in_room').innerHTML= ' '+roomId;
 }
 
 function base64Image(image){

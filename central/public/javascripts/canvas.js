@@ -37,7 +37,7 @@ function initCanvas(sckt, imageUrl) {
         if (e.type === 'mousemove') {
             if (flag) {
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                images.emit('drawing', roomNo, name, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                images.emit('drawing', roomId, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
             }
         }
     });
@@ -45,7 +45,7 @@ function initCanvas(sckt, imageUrl) {
     // this is code left in case you need to provide a button clearing the canvas (it is suggested that you implement it)
     $('.canvas-clear').on('click', function (e) {
         clearCanvas(ctx, canvas);
-        images.emit('clear', roomNo, name)
+        images.emit('clear', roomId, userId)
     });
 
     // called when someone else clears the canvas
@@ -54,7 +54,7 @@ function initCanvas(sckt, imageUrl) {
     })
 
     // called when someone else draws on the canvas
-    images.on('drawing', function(room, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness) {
+    images.on('drawing', function(roomId, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness) {
         let ctx = canvas[0].getContext('2d');
         drawOnCanvas(ctx, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness);
     });
