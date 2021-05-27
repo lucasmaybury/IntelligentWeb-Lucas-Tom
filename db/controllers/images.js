@@ -75,6 +75,7 @@ exports.getByName = function (req, res) {
  * @returns {Promise<void>}
  */
 exports.insert = async function (req, res) {
+    console.log(req.body)
     let imageData = req.body;
     if (imageData == null) {
         res.status(403).send('No data sent!')

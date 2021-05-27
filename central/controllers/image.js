@@ -48,7 +48,7 @@ exports.saveImageToDB = function (req, res) {
         body: JSON.stringify(req.body) //pass body through to database server from client
     }
     console.log(req.body)
-    fetch(`http://localhost:3000`, headers)//make the request
+    fetch(`http://localhost:3001`, headers)//make the request
         .then(response => {
             if(response.status !== 201) { throw new Error('error saving to database') } //forces program into catch block below
             console.log('saving image')
