@@ -69,7 +69,7 @@ async function openCamera() {
         context.fillStyle = "#AAA";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
-        var data = canvas.toDataURL('image/png');
+        var data = canvas.toDataURL('base64');
         photo.setAttribute('src', data);
     }
 
@@ -86,6 +86,8 @@ async function openCamera() {
             canvas.height = height;
             context.drawImage(video, 0, 0, width, height);
             cameraImage = canvas.toDataURL('base64');
+            //console.log(cameraImage);
+            getTakenImage(cameraImage);
         } else {
             clear();
         }

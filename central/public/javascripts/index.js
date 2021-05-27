@@ -2,7 +2,7 @@ let userId = null;
 let roomId = null;
 let socket;
 let chat = io.connect('/chat');
-let cameraImage = null
+let cameraImage = null;
 
 /**
  * called by <body onload>
@@ -130,28 +130,39 @@ function base64Image(image){
         reader.onerror = error => reject(error);
     });
 }
+function getTakenImage(image) {
+    cameraImage = image;
+}
+
 //ajax
 async function onSubmit(){
     // The .serializeArray() method creates a JavaScript array of objects
     // https://api.jquery.com/serializearray/
-
     //form data
+
+
     const formArray= $("#image-form").serializeArray();
     const data={};
     for (let index in formArray){
         data[formArray[index].name]= formArray[index].value;
     }
 
-    //base 64 the image
-    var image = document.querySelector('#image').files[0];
-    data.image = await base64Image(image)
-        .catch(err => {
-            console.log(err)
-            alert(err)
-        })
+    if (cameraImage != null){
+        console.log('Saving Camera Image');
+        data.image = cameraImage;
+    } else {
+        //base 64 the image
+        console.log('Saving Upload Image')
+        var image = document.querySelector('#image').files[0];
+        data.image = await base64Image(image)
+            .catch(err => {
+                console.log(err)
+                alert(err)
+            })
+    }
 
     // const data = JSON.stringify($(this).serializeArray());
-    console.log(data);
+    //console.log(data);
     sendAjaxQuery('/image', data);
     // prevent the form from reloading the page (normal behaviour for forms)
     event.preventDefault();
