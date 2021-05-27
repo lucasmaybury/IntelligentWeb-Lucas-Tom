@@ -2,7 +2,7 @@ let name = null;
 let roomNo = null;
 let socket;
 let chat = io.connect('/chat');
-let cameraImage = null
+let cameraImage;
 
 /**
  * called by <body onload>
@@ -130,12 +130,17 @@ function base64Image(image){
         reader.onerror = error => reject(error);
     });
 }
+function getTakenImage(image) {
+    cameraImage = image;
+}
+
 //ajax
 async function onSubmit(){
     // The .serializeArray() method creates a JavaScript array of objects
     // https://api.jquery.com/serializearray/
-
     //form data
+    console.log(cameraImage);
+
     const formArray= $("#image-form").serializeArray();
     const data={};
     for (let index in formArray){
@@ -151,7 +156,7 @@ async function onSubmit(){
         })
 
     // const data = JSON.stringify($(this).serializeArray());
-    console.log(data);
+    //console.log(data);
     sendAjaxQuery('/image', data);
     // prevent the form from reloading the page (normal behaviour for forms)
     event.preventDefault();
