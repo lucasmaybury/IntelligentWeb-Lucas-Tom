@@ -1,9 +1,9 @@
 /**
  * this file contains the functions to control the drawing on the canvas
  */
-let room;
-let userId;
 let color = 'red', thickness = 4;
+
+let images = io.connect('/images');
 
 /**
  * it inits the image canvas to draw on. It sets up the events to respond to (click, mouse on, etc.)
@@ -37,26 +37,27 @@ function initCanvas(sckt, imageUrl) {
         if (e.type === 'mousemove') {
             if (flag) {
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
-                // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
+                images.emit('drawing', roomNo, name, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
             }
         }
     });
 
-    // this is code left in case you need to  provide a button clearing the canvas (it is suggested that you implement it)
+    // this is code left in case you need to provide a button clearing the canvas (it is suggested that you implement it)
     $('.canvas-clear').on('click', function (e) {
-        let c_width = canvas.width();
-        let c_height = canvas.height();
-        ctx.clearRect(0, 0, c_width, c_height);
-        // @todo if you clear the canvas, you want to let everyone know via socket.io (socket.emit...)
-
+        clearCanvas(ctx, canvas);
+        images.emit('clear', roomNo, name)
     });
 
-    // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
-    // I suggest that you receive userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness
-    // and then you call
-    //     let ctx = canvas[0].getContext('2d');
-    //     drawOnCanvas(ctx, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness)
+    // called when someone else clears the canvas
+    images.on('clear', function() {
+        clearCanvas(ctx, canvas);
+    })
+
+    // called when someone else draws on the canvas
+    images.on('drawing', function(room, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness) {
+        let ctx = canvas[0].getContext('2d');
+        drawOnCanvas(ctx, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness);
+    });
 
     // this is called when the src of the image is loaded
     // this is an async operation as it may take time
@@ -85,6 +86,17 @@ function initCanvas(sckt, imageUrl) {
             }
         }, 10);
     });
+}
+
+/**
+ * clears the canvas of any marks or annotations
+ * @param ctx
+ * @param canvas
+ */
+function clearCanvas(ctx, canvas){
+    let c_width = canvas.width();
+    let c_height = canvas.height();
+    ctx.clearRect(0, 0, c_width, c_height);
 }
 
 /**
