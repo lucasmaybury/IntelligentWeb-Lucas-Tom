@@ -21,6 +21,13 @@ function init() {
     else {
         alert('This browser doesn\'t support IndexedDB');
     }
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('./serviceWorker.js')
+            .then(function() { console.log('Service Worker Registered'); });
+    }
+
     //loadData(false);
 }
 
@@ -64,8 +71,9 @@ function initChatSocket() {
  * and sends the message via  socket
  */
 function sendChatText() {
-    let chatText = document.getElementById('chat_input').value;
-    chat.emit('chat', roomNo, name, chatText);
+    let chatText = $('#chat_input');
+    console.log(chatText.value);
+    chat.emit('chat', roomNo, name, chatText.value);
 }
 
 /**
@@ -76,11 +84,10 @@ function connectToRoom() {
     roomNo = document.getElementById('roomNo').value;
     name = document.getElementById('name').value;
     let imageUrl = document.getElementById('image_url').value;
-    //console.log(imageUrl);
     if (!name) name = 'Unknown-' + Math.random();
 
     initCanvas(socket, imageUrl);
-    hideLoginInterface(imageUrl, name);
+    hideLoginInterface(roomNo, name);
     chat.emit('create or join', roomNo, name);
     images.emit('create or join', roomNo, name);
     event.preventDefault();
@@ -91,6 +98,7 @@ function connectToRoom() {
  * @param text: the text to append
  */
 function writeOnChatHistory(text) {
+    console.log("writing chat history from indexedDB")
     let history = document.getElementById('history');
     let paragraph = document.createElement('p');
     paragraph.innerHTML = text;
