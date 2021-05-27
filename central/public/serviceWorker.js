@@ -2,7 +2,7 @@ const cacheName = "spyChat-cache";
 
 let urlsToCache = [
     "/",
-    "/javascripts/db-methods/image-db.js",
+    "/javascripts/db-methods/chat-db.js",
     "/javascripts/idb/index.js",
     "/javascripts/idb/wrap-idb-value.js",
 
