@@ -56,6 +56,7 @@ async function openCamera() {
 
         start.addEventListener('click', function(ev){
             takepicture();
+
             ev.preventDefault();
         }, false);
     }
@@ -84,9 +85,7 @@ async function openCamera() {
             canvas.width = width;
             canvas.height = height;
             context.drawImage(video, 0, 0, width, height);
-            var data = canvas.toDataURL('image/png');
-            photo.setAttribute('src', data);
-            console.log('Success');
+            cameraImage = canvas.toDataURL('base64');
         } else {
             clear();
         }
@@ -94,9 +93,6 @@ async function openCamera() {
 
     // Set up our event listener to run the startup process
     // once loading is complete.
-   window.addEventListener('click', startup, false);
+    window.addEventListener('click', startup, false);
 
 };
-
-
-
