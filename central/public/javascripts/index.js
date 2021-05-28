@@ -125,6 +125,12 @@ function hideLoginInterface(roomId, userId) {
     document.getElementById('in_room').innerHTML= ' '+roomId;
 }
 
+/**
+ * It converts image into base64
+ * @param image
+ * @returns {Promise<base 64 image>}
+ */
+
 function base64Image(image){
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -133,11 +139,22 @@ function base64Image(image){
         reader.onerror = error => reject(error);
     });
 }
+
+/**
+ * Receives the taken image from the camera
+ * this can then be passed to AJAX request
+ * @param image
+ */
+
 function getTakenImage(image) {
     cameraImage = image;
 }
 
-//ajax
+/**
+ * Processes the data from the form which
+ * takes or uploads a picture
+ * @returns {Promise<any error>}
+ */
 async function onSubmit(){
     // The .serializeArray() method creates a JavaScript array of objects
     // https://api.jquery.com/serializearray/
@@ -168,6 +185,12 @@ async function onSubmit(){
             })
     }
 }
+
+/**
+ * Performs the Post request to the API
+ * @param url
+ * @param data
+ */
 
 function sendAjaxQuery(url, data) {
     $.ajax({

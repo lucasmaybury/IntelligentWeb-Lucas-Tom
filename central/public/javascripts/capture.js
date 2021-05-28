@@ -1,20 +1,16 @@
-//opening camera function
+/**
+ * Opens the camera and allows continuous pictures to be taken
+ * @returns {Promise<the selected picture in base 64 format}
+ */
 async function openCamera() {
-    // The width and height of the captured photo. We will set the
-    // width to the value defined here, but the height will be
-    // calculated based on the aspect ratio of the input stream.
-
-    var width = 300;    // We will scale the photo width to this
-    var height = 300;     // This will be computed based on the input stream
-
+    // The width and height of the captured photo.
+    var width = 300;
+    var height = 300;
     // |streaming| indicates whether or not we're currently streaming
-    // video from the camera. Obviously, we start at false.
-
-    var streaming = false;
-
+    // video from the camera.
+    var streamingCamera = false;
     // The various HTML elements we need to configure or control. These
     // will be set by the startup() function.
-
     var video = null;
     var canvas = null;
     var photo = null;
@@ -26,6 +22,7 @@ async function openCamera() {
         photo = document.getElementById('photo');
         start = document.getElementById('start');
 
+        //Using WebRTC
         navigator.mediaDevices.getUserMedia({video: true, audio: false})
             .then(function(stream) {
                 video.srcObject = stream;
@@ -35,8 +32,9 @@ async function openCamera() {
                 console.log("An error occurred: " + err);
             });
 
+
         video.addEventListener('canplay', function(ev){
-            if (!streaming) {
+            if (!streamingCamera) {
                 height = video.videoHeight / (video.videoWidth/width);
 
                 // Firefox currently has a bug where the height can't be read from
@@ -50,7 +48,7 @@ async function openCamera() {
                 video.setAttribute('height', height);
                 canvas.setAttribute('width', width);
                 canvas.setAttribute('height', height);
-                streaming = true;
+                streamingCamera = true;
             }
         }, false);
 
@@ -62,7 +60,6 @@ async function openCamera() {
     }
 
     // Fill the photo with an indication that none has been
-    // captured.
 
     function clear() {
         var context = canvas.getContext('2d');
@@ -74,10 +71,7 @@ async function openCamera() {
     }
 
     // Capture a photo by fetching the current contents of the video
-    // and drawing it into a canvas, then converting that to a PNG
-    // format data URL. By drawing it on an offscreen canvas and then
-    // drawing that to the screen, we can change its size and/or apply
-    // other changes before drawing it.
+    // and drawing it into a canvas, converting to base64 after.
 
     function takepicture() {
         var context = canvas.getContext('2d');
@@ -86,15 +80,13 @@ async function openCamera() {
             canvas.height = height;
             context.drawImage(video, 0, 0, width, height);
             cameraImage = canvas.toDataURL('base64');
-            //console.log(cameraImage);
             getTakenImage(cameraImage);
         } else {
             clear();
         }
     }
 
-    // Set up our event listener to run the startup process
-    // once loading is complete.
+    //event listener to start to process
     window.addEventListener('click', startup, false);
 
 };
