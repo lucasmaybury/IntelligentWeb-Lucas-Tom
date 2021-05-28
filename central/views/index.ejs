@@ -26,21 +26,21 @@
         <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
         <form id="connect-form" onsubmit="return false;">
             <p>
-                <label for="userId"> Your name </label>
+                <label for="userId"> Your name: </label>
                 <input type="text" id="userId" name="userId">
             </p>
              <p>
-                <label for="roomId"> Your room </label>
-                <input type="text" id="roomId" name="roomId"  value="A">
+                <label for="roomId"> Your room: </label>
+                <input type="text" id="roomId" name="roomId">
                 <button id="roomIdGenerator" onclick="generateRoom()">Generate Room</button>
             </p>
             <p>
-                <label for="imageName"> Image Name </label>
-                <input type="text" id="imageName" name="imageName" value="NameTest">
+                <label for="imageName"> Image Name: </label>
+                <input type="text" id="imageName" name="imageName">
             </p>
             <p style=" width: 100%">
-                <label for="image_url"> Image (URL) </label>
-                <input type="text" id="image_url" name="image_url" value="https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg">
+                <label for="image_url"> Image (URL): </label>
+                <input type="text" id="image_url" name="image_url">
             </p>
             <button type="submit" id="connect" onclick="connectToRoom()">Connect</button>
         </form>
@@ -59,19 +59,19 @@
             <p><label> For your image enter a: </label> </p>
             <p>
                 <label> Name:  </label>
-                <input type="text" id="name" name="name" value="NameTest">
+                <input type="text" id="name" name="name">
             </p>
             <p>
                 <label> Title:</label>
-                <input type="text" id="title" name="title" value="TitleTest">
+                <input type="text" id="title" name="title">
             </p>
             <p>
                 <label> Description:  </label>
-                <input type="text" id="description" name="description" value="DescTest">
+                <input type="text" id="description" name="description">
             </p>
             <p>
                 <label> Author Name:  </label>
-                <input type="text" id="authorName" name="authorName" value="AuthorTest">
+                <input type="text" id="authorName" name="authorName">
             </p>
             <button type="submit" id="upload" onclick="onSubmit()">Submit</button>
         </form>
