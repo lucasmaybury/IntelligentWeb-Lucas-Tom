@@ -90,6 +90,8 @@ function connectToRoom() {
     hideLoginInterface(roomId, userId);
     chat.emit('create or join', roomId, userId);
     images.emit('create or join', roomId, userId);
+
+    getKGHistory(roomId);
 }
 
 /**

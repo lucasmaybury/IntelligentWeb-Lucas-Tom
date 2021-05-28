@@ -30,14 +30,8 @@ function selectItem(event) {
     let row = event.row;
     color = '#'+Math.floor(Math.random()*16777215).toString(16);
     document.getElementById('colour-display').style.backgroundColor = color;
-    let newAnnotation = document.createElement('div');
-    newAnnotation.style.border = 'solid';
-    newAnnotation.style.borderColor = color;
-    newAnnotation.innerHTML = `
-        <h4>Name: ${row.name}</h4>
-        <p>ID: ${row.id}</p>
-        <p>Description: ${row.detailedDescription || row.description}</p>`;
-    document.getElementById('resultPanel').append(newAnnotation);
+    addKGEntry(row, color);
+    cacheKG(roomId, color, row);
     document.getElementById("canvas").style.cursor = "crosshair"
     alert("Now draw an annotation!");
 }
@@ -45,4 +39,15 @@ function selectItem(event) {
 function setType(){
     console.log('setting type');
     widgetInit();
+}
+
+function addKGEntry(row, borderColour) {
+    let newAnnotation = document.createElement('div');
+    newAnnotation.style.border = 'solid';
+    newAnnotation.style.borderColor = borderColour;
+    newAnnotation.innerHTML = `
+        <h4>Name: ${row.name}</h4>
+        <p>ID: ${row.id}</p>
+        <p>Description: ${row.detailedDescription || row.description}</p>`;
+    document.getElementById('resultPanel').append(newAnnotation);
 }

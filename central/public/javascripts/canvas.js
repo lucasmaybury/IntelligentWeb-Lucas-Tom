@@ -66,7 +66,7 @@ function initCanvas(sckt, imageUrl) {
     images.on('drawing', function(roomId, canvasWidth, canvasHeight, x1, y1, x2, y2, color, thickness) {
         let ctx = canvas[0].getContext('2d');
         drawOnCanvas(ctx, canvasWidth, canvasHeight, x1, y1, x2, y2, color, thickness);
-        cacheAnnotation({roomId: roomId, w:canvasWidth, h:canvasHeight, x1:x1, y1:y1, x2:x2, y2:y2 });
+        cacheAnnotation({roomId: roomId, w:canvasWidth, h:canvasHeight, x1:x1, y1:y1, x2:x2, y2:y2, color: color, thickness: thickness });
     });
 
     // this is called when the src of the image is loaded
