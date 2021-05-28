@@ -36,7 +36,7 @@ let writeFilePromise = (path, file) => new Promise((resolve, reject) => {
 exports.getByName = function (req, res) {
     let imageName = req.params.name;
     if (imageName == null) {
-        res.status(403).send('No data sent!')
+        res.status(400).send('No data sent!')
     }
     try {
         Image.find({name: imageName}, //execute mongoDB query
