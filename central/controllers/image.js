@@ -10,7 +10,7 @@ exports.sendImageToClient = function (req, res) {
     let headers = {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
-        userAgent: 'localhost:3000'
+        userAgent: 'localhost:3000',
     }
 
     fetch(`http://localhost:3001/${req.params.name}`, headers) //make the call to the database server

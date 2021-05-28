@@ -12,7 +12,7 @@ let images = io.connect('/images');
  * @param sckt the open socket to register events on
  * @param imageUrl the image url to download
  */
-function initCanvas(sckt, imageUrl) {
+async function initCanvas(sckt, imageUrl) {
     socket = sckt;
     let flag = false,
         prevX, prevY, currX, currY = 0;
@@ -20,8 +20,20 @@ function initCanvas(sckt, imageUrl) {
     let cvx = document.getElementById('canvas');
     let img = document.getElementById('canvas_Image');
     let ctx = cvx.getContext('2d');
-    img.src = imageUrl;
 
+    console.log(imageUrl);
+    if(imageUrl.includes('http')){
+        img.src = imageUrl;
+        console.log('http')
+        console.log(imageUrl)
+    } else {
+        let image = await fetch('http://localhost:3000/image/' + imageName)
+            .then(response => response.json())
+            .catch(err => console.log(err))
+        //img.src = atob(imageUrl);
+        img.src = (imageUrl)
+        console.log("Image source " + imageUrl)
+    }
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
         prevX = currX;
