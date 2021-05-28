@@ -82,12 +82,15 @@ function sendChatText() {
  */
 async function connectToRoom() {
 
+
     const getData = async () => {
         await fetch('http://localhost:3000/image/NameTest2')
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => console.log(data.image))
     }
-    console.log(getData());
+    var data = (getData());
+
+
 
     roomId = document.getElementById('roomId').value;
     userId = document.getElementById('userId').value;
