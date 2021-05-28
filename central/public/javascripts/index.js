@@ -82,23 +82,14 @@ function sendChatText() {
  */
 async function connectToRoom() {
 
-
-    const getData = async () => {
-        await fetch('http://localhost:3000/image/NameTest2')
-            .then(response => response.json())
-            .then(data => console.log(data.image))
-    }
-    var data = (getData());
-
-
-
     roomId = document.getElementById('roomId').value;
     userId = document.getElementById('userId').value;
     let imageUrl = document.getElementById('image_url').value;
+    let imageName = document.getElementById('imageName').value;
+
     if (!userId) userId = 'Unknown-' + Math.random();
 
-
-    initCanvas(socket, imageUrl);
+    initCanvas(socket, imageName || imageUrl);
     hideLoginInterface(roomId, userId);
     chat.emit('create or join', roomId, userId);
     images.emit('create or join', roomId, userId);
