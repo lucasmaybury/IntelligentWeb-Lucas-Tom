@@ -4,8 +4,8 @@
  * @param annotationObject: all information about a single annotation
  * @returns {Promise<void>}
  */
-async function cacheAnnotation(annotationObject) {
-    storeAnnotationData(annotationObject);
+async function cacheKG(roomId, color, content) {
+    storeKGData({roomId: roomId, color: color, content: content});
 }
 
 /**
@@ -14,11 +14,13 @@ async function cacheAnnotation(annotationObject) {
  * @param roomId: room name / room ID
  * @returns {Promise<void>}
  */
-async function getAnnotationHistory(ctx, roomId) {
+async function getKGHistory(roomId) {
     console.log("getting annotation history")
-    getRoomAnnotations(roomId).then(annotations => {
-        annotations.forEach(annotation => {
-            drawOnCanvas(ctx, annotation.w, annotation.h, annotation.x1, annotation.y1, annotation.x2, annotation.y2, annotation.color, annotation.thickness);
+    getRoomKGs(roomId).then(entries => {
+        entries.forEach(entry => {
+            console.log("getting: " + JSON.stringify(entry))
+            addKGEntry(entry.content, entry.color);
         });
     });
+
 }

@@ -93,7 +93,8 @@ async function connectToRoom() {
     hideLoginInterface(roomId, userId);
     chat.emit('create or join', roomId, userId);
     images.emit('create or join', roomId, userId);
-    event.preventDefault();
+
+    getKGHistory(roomId);
 }
 
 /**
@@ -184,7 +185,6 @@ async function onSubmit(){
     //console.log(data);
     sendAjaxQuery('/image', data);
     // prevent the form from reloading the page (normal behaviour for forms)
-    event.preventDefault();
 }
 
 /**

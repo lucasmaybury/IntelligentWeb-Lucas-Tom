@@ -2,6 +2,7 @@
  * this file contains the functions to control the drawing on the canvas
  */
 let color = 'red', thickness = 4;
+let KGAnnotate = false;
 
 let images = io.connect('/images');
 
@@ -44,6 +45,11 @@ async function initCanvas(sckt, imageUrl) {
         }
         if (e.type === 'mouseup' || e.type === 'mouseout') {
             flag = false;
+            color='red';
+            document.getElementById("canvas").style.cursor = "auto"
+            document.getElementById("query_type").value="";
+            document.getElementById("query_input").value="";
+            document.getElementById('colour-display').style.backgroundColor = color;
         }
         // if the flag is up, the movement of the mouse draws on the canvas
         if (e.type === 'mousemove') {
@@ -56,20 +62,23 @@ async function initCanvas(sckt, imageUrl) {
 
     // this is code left in case you need to provide a button clearing the canvas (it is suggested that you implement it)
     $('.canvas-clear').on('click', function (e) {
+        console.log("clearing canvas");
         clearCanvas(ctx, canvas);
-        images.emit('clear', roomId, userId)
+        images.emit('clear', roomId);
+        drawImageScaled(img, cvx, ctx)
     });
 
     // called when someone else clears the canvas
     images.on('clear', function() {
         clearCanvas(ctx, canvas);
+        drawImageScaled(img, cvx, ctx);
     })
 
     // called when someone else draws on the canvas
     images.on('drawing', function(roomId, canvasWidth, canvasHeight, x1, y1, x2, y2, color, thickness) {
         let ctx = canvas[0].getContext('2d');
         drawOnCanvas(ctx, canvasWidth, canvasHeight, x1, y1, x2, y2, color, thickness);
-        cacheAnnotation({roomId: roomId, w:canvasWidth, h:canvasHeight, x1:x1, y1:y1, x2:x2, y2:y2 });
+        cacheAnnotation({roomId: roomId, w:canvasWidth, h:canvasHeight, x1:x1, y1:y1, x2:x2, y2:y2, color: color, thickness: thickness });
     });
 
     // this is called when the src of the image is loaded
@@ -109,8 +118,8 @@ async function initCanvas(sckt, imageUrl) {
  * @param canvas
  */
 function clearCanvas(ctx, canvas){
-    let c_width = canvas.width();
-    let c_height = canvas.height();
+    let c_width = canvas.width;
+    let c_height = canvas.height;
     ctx.clearRect(0, 0, c_width, c_height);
 }
 

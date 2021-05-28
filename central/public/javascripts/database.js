@@ -15,10 +15,9 @@ let db;
  * Constants
  */
 const DB_NAME= 'db_spychat';
-const IMAGE_STORE_NAME= 'store_image';
 const MESSAGES_STORE_NAME= 'store_messages';
 const ANNOTATIONS_STORE_NAME= 'store_annotations';
-const TRANSITIONS_STORE_NAME= 'store_transitions';
+const KG_STORE_NAME= 'store_kg';
 
 /**
  * initialises the database
@@ -30,44 +29,34 @@ async function initDatabase(){
         db = await idb.openDB(DB_NAME, 2, {
             upgrade(upgradeDb, oldVersion, newVersion) {
 
-                //Image:
-                // id, name, title, description, author, image
-                if (!upgradeDb.objectStoreNames.contains(IMAGE_STORE_NAME)) {
-                    let sumsDB = upgradeDb.createObjectStore(IMAGE_STORE_NAME, {
-                        keyPath: 'id',
-                        autoIncrement: true
-                    });
-                    sumsDB.createIndex('name', 'name', {unique: true, multiEntry: true});
-                }
-
                 //Messages:
                 // id, roomId, userId, text, datetime
                 if (!upgradeDb.objectStoreNames.contains(MESSAGES_STORE_NAME)) {
-                    let sumsDB = upgradeDb.createObjectStore(MESSAGES_STORE_NAME, {
+                    let messagesDB = upgradeDb.createObjectStore(MESSAGES_STORE_NAME, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    sumsDB.createIndex('roomId', 'roomId', {unique: false, multiEntry: true});
+                    messagesDB.createIndex('roomId', 'roomId', {unique: false, multiEntry: true});
                 }
 
                 //Annotation:
                 // id, roomId, userId, canvasHeight, x1, y21, x2, y2, color, thickness
                 if (!upgradeDb.objectStoreNames.contains(ANNOTATIONS_STORE_NAME)) {
-                    let sumsDB = upgradeDb.createObjectStore(ANNOTATIONS_STORE_NAME, {
+                    let annotationsDB = upgradeDb.createObjectStore(ANNOTATIONS_STORE_NAME, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    sumsDB.createIndex('roomId', 'roomId', {unique: false, multiEntry: true});
+                    annotationsDB.createIndex('roomId', 'roomId', {unique: false, multiEntry: true});
                 }
 
-                //Transitions:
-                // id, source, destination
-                if (!upgradeDb.objectStoreNames.contains(TRANSITIONS_STORE_NAME)) {
-                    let sumsDB = upgradeDb.createObjectStore(TRANSITIONS_STORE_NAME, {
+                //Knowledge Graph Entries:
+                // id, roomId, colour, content
+                if (!upgradeDb.objectStoreNames.contains(KG_STORE_NAME)) {
+                    let kgDB = upgradeDb.createObjectStore(KG_STORE_NAME, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    sumsDB.createIndex('id', 'id', {unique: true, multiEntry: true});
+                    kgDB.createIndex('roomId', 'roomId', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -189,4 +178,60 @@ async function getRoomAnnotations(roomId) {
     }
 }
 window.getRoomAnnotations= getRoomAnnotations;
+
+
+/**
+ * KNOWLEDGE GRAPH ENTRIES
+ */
+
+/**
+ * saves an annotation to the indexedDB
+ * @param kgObject: the message to be saved
+ * @returns {Promise<void>}
+ */
+async function storeKGData(kgObject) {
+    console.log('inserting KG entry: '+JSON.stringify(kgObject));
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try{
+            let tx = await db.transaction(KG_STORE_NAME, 'readwrite'); //init transaction
+            let store = await tx.objectStore(KG_STORE_NAME); //init store
+            await store.put(kgObject); //write the object to the store
+            await  tx.done; //end the transation
+            console.log('added item to the store:'+ JSON.stringify(kgObject));
+        } catch(error) {
+            console.error('error storing message:\n'+error);
+        };
+    }
+}
+window.storeKGData= storeKGData;
+
+/**
+ * Gets all cached messages
+ * @param kgObject: the name of the room that the message was sent to
+ * @returns {Promise<message object>}: a promise with the value of a collection of messages
+ */
+async function getRoomKGs(roomId) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try {
+            console.log('fetching KG entries for room: ' + roomId);
+            let tx = await db.transaction(KG_STORE_NAME, 'readonly'); //init transaction
+            let store = await tx.objectStore(KG_STORE_NAME); //init store
+            let roomIndex = await store.index('roomId'); //init room index
+            let readingsList = await roomIndex.getAll(IDBKeyRange.only(roomId));
+            //get all annotations where the roomId is the same as the requested value
+            await tx.complete; //end transaction
+            return readingsList;
+        } catch (error) {
+            console.error(error)
+            alert("unable to get annotation history for this room")
+        }
+    } else {
+        alert("Error starting database")
+    }
+}
+window.getRoomKGs= getRoomKGs;
 
