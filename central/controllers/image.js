@@ -15,7 +15,9 @@ exports.sendImageToClient = function (req, res) {
     console.log("fetching image: ",req.params.name)
     fetch(`http://localhost:3001/${req.params.name}`, headers) //make the call to the database server
         .then(response => response.json())
-        .then(image => res.send(image)) //return image data to browser
+        .then(image => {
+            res.send(image)
+        }) //return image data to browser
         .catch(err => {
             console.error(err);
             if (err.status === 404) {

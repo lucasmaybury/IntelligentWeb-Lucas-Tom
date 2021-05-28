@@ -200,20 +200,15 @@ function sendAjaxQuery(url, data) {
         dataType: 'json',
         type: 'POST',
         success: function (dataR) {
-            // no need to JSON parse the result, as we are using
-            // dataType:json, so JQuery knows it and unpacks the
-            // object for us before returning it
-            // in order to have the object printed by alert
-            // we need to JSON.stringify the object
-            document.getElementById('results').innerHTML= JSON.stringify(dataR);
+            console.log(dataR);
         },
         error: function (response) {
             // the error structure we passed is in the field responseText
             // it is a string, even if we returned as JSON
             // if you want o unpack it you must do:
             // const dataR= JSON.parse(response.responseText)
-            alert (response.responseText);
-            console.log(response);
+            alert (response.status+" error");
+            console.log(response.status+" error: ");
         }
     });
 }
