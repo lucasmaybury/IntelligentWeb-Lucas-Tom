@@ -5,12 +5,17 @@
     <script src="/socket.io/socket.io.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/knowledge/kgsearch/widget/1.0/widget.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/knowledge/kgsearch/widget/1.0/widget.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="/javascripts/db-methods/chat-db.js"></script>
     <script src="/javascripts/db-methods/annotation-db.js"></script>
     <script src="/javascripts/database.js" type="module"></script>
     <script src="/javascripts/index.js"></script>
     <script src="/javascripts/canvas.js"></script>
     <script src="/javascripts/capture.js"></script>
+    <script src="/javascripts/knowledgeGraph.js"></script>
 </head>
 <body onload="init()">
 
@@ -18,7 +23,7 @@
     <div class="content" id="initial_form" style="display: block">
         <h1>Sign in By URL</h1>
         <p>Please insert the ID of the Room you want to Join, if you do not have a room ID, click Generate Room</p>
-        <form id="connect-form" onsubmit="connectToRoom()">
+        <form id="connect-form" onsubmit="return false;">
             <p>
                 <label for="userId"> Your name </label>
                 <input type="text" id="userId" name="userId">
@@ -32,7 +37,7 @@
                 <label for="image_url"> Image (URL) </label>
                 <input type="text" id="image_url" name="image_url" value="https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg">
             </p>
-            <input type="submit" value="Connect" id="connect">
+            <button type="submit" id="connect" onclick="connectToRoom()">Connect</button>
         </form>
     </div>
 
@@ -41,7 +46,7 @@
 <!-- Upload an Image -->
     <div id="initial_form2" style="display: block">
         <h1>Upload or Take a Picture</h1>
-        <form id="image-form" onsubmit="onSubmit()" method="POST">
+        <form id="image-form" onsubmit="return false;" onsubmit="onSubmit()" method="POST">
             <p>
                 <label for="myImage"> Choose a file </label>
                 <input type="file" id="image" name="image">
@@ -63,7 +68,7 @@
                 <label> Author Name:  </label>
                 <input type="text" id="authorName" name="authorName" value="AuthorTest">
             </p>
-            <input type="submit" value="Submit" id="upload">
+            <button type="submit" id="upload" onclick="onSubmit()">Submit</button>
         </form>
     </div>
 
@@ -85,27 +90,44 @@
     <div id="chat_interface" style="display: none">
         <div>
             <p>
-            <div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
-        </div>
+                <div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
             </p>
-        <div style="width: 100%; height: 50vh">
-            <img id="canvas_Image" height="100%" >
-            <canvas id="canvas" ></canvas>
-        </div>
+            <p>Colour: <div id="colour-display" style="display: inline-block; height: 20px; width: 20px; margin:0; background-color: red;"></div></p>
+            <div>
+                <div style="width: 60%; height: 50vh; display: inline-block;">
+                    <img id="canvas_Image" height="100%" >
+                    <canvas id="canvas" ></canvas>
+                </div>
+            </div>
+            <button class="canvas-clear">Clear Canvas</button>
+            <div>
+                <div style="width: 40%; height: 50vh; display: inline-block;" id="query_div">
+                    <form id="query_form" onsubmit="return false;">
+                        <p>
+                            <label for="query_type"> Set type: </label>
+                            <input type="text" id="query_type" name="query_type" onchange="setType()">
+                        </p>
+                        <p>
+                            <label for="query_input"> Search: </label>
+                            <input type="text" id="query_input" name="query_input">
+                        </p>
+                    </form>
+                    <div class='resultPanel' id="resultPanel"></div>
+                </div>
+            </div>
 
-    <!--    </div>-->
-        <div id="history" style="height: 35vh" class="boxed scrolling"></div>
-        <div id="input" style="height: 5vh" class=" boxed">
-            <form onsubmit="return false;" style="width: 100%">
-                <p>
-                    <label for="chat_input"> chat: </label>
-                    <input type="text" id="chat_input" name="chat_input" style="width: 80%">
-                    <button id="news_send" onclick="sendChatText()">Send</button>
-                </p>
-            </form>
+            <div id="history" style="height: 35vh" class="boxed scrolling"></div>
+            <div id="input" style="height: 5vh" class=" boxed">
+                <form onsubmit="return false;" style="width: 100%">
+                    <p>
+                        <label for="chat_input"> chat: </label>
+                        <input type="text" id="chat_input" name="chat_input" style="width: 80%">
+                        <button id="news_send" onclick="sendChatText()">Send</button>
+                    </p>
+                </form>
+            </div>
         </div>
-    </div>
         <div class="offline_div" id="offline_div" style="display: none">You are offline</div>
-
+    </div>
 </body>
 </html>
