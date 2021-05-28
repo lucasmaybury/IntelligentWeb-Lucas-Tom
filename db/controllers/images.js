@@ -11,7 +11,7 @@ const getImageData = function(imagePath){
     return new Promise((resolve, reject) => {
     fs.readFile(imagePath,'base64', (err,data) => {
         if(err) reject(err);
-        resolve(data)
+        resolve(data.replace(/^dataimage\/(png|jpg)base64/, ""))
     });
 })}
 
@@ -53,7 +53,7 @@ exports.getByName = function (req, res) {
                                 title: firstElem.title,
                                 description : firstElem.description,
                                 authorName: firstElem.authorName,
-                                image: imageData
+                                image: imageData.replace(/^dataimage\/(jpeg|png)base64/, "")
                             };
                             res.setHeader('Content-Type', 'application/json');
                             res.send(JSON.stringify(image));

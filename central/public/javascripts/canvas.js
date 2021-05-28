@@ -21,18 +21,18 @@ async function initCanvas(sckt, imageUrl) {
     let img = document.getElementById('canvas_Image');
     let ctx = cvx.getContext('2d');
 
-    console.log(imageUrl);
     if(imageUrl.includes('http')){
+        console.log("setting image from URL")
         img.src = imageUrl;
-        console.log('http')
-        console.log(imageUrl)
     } else {
-        let image = await fetch('http://localhost:3000/image/' + imageName)
+        console.log("setting image from database",imageUrl)
+        let dbImage = await fetch('http://localhost:3000/image/' + imageUrl, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        })
             .then(response => response.json())
-            .catch(err => console.log(err))
-        //img.src = atob(imageUrl);
-        img.src = (imageUrl)
-        console.log("Image source " + imageUrl)
+            .catch(err => console.error(err))
+        img.setAttribute('src', `data:image/jpeg;base64, ${dbImage.image}`)
     }
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
