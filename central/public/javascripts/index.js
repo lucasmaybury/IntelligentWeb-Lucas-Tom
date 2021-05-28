@@ -80,11 +80,20 @@ function sendChatText() {
  * used to connect to a room. It gets the userId and room number from the
  * interface
  */
-function connectToRoom() {
+async function connectToRoom() {
+
+    const getData = async () => {
+        await fetch('http://localhost:3000/image/NameTest2')
+            .then(response => response.json())
+            .then(data => console.log(data))
+    }
+    console.log(getData());
+
     roomId = document.getElementById('roomId').value;
     userId = document.getElementById('userId').value;
     let imageUrl = document.getElementById('image_url').value;
     if (!userId) userId = 'Unknown-' + Math.random();
+
 
     initCanvas(socket, imageUrl);
     hideLoginInterface(roomId, userId);
@@ -139,7 +148,6 @@ async function onSubmit(){
     // The .serializeArray() method creates a JavaScript array of objects
     // https://api.jquery.com/serializearray/
     //form data
-
 
     const formArray= $("#image-form").serializeArray();
     const data={};
