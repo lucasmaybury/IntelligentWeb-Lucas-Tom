@@ -21,8 +21,6 @@ function initCanvas(sckt, imageUrl) {
     let ctx = cvx.getContext('2d');
     img.src = imageUrl;
 
-    getAnnotationHistory(ctx, roomId);
-
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
         prevX = currX;
@@ -39,9 +37,7 @@ function initCanvas(sckt, imageUrl) {
         if (e.type === 'mousemove') {
             if (flag) {
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                cacheAnnotation({
-                    roomId:roomId, userId:userId, canvasWidth:canvas.width, canvasHeight:canvas.height, x1:prevX, y1:prevY, x2:currX, y2:currY, color:color, thickness:thickness
-                })
+                images.emit('drawing', roomId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
             }
         }
     });
@@ -58,12 +54,10 @@ function initCanvas(sckt, imageUrl) {
     })
 
     // called when someone else draws on the canvas
-    images.on('drawing', function(roomId, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness) {
+    images.on('drawing', function(roomId, canvasWidth, canvasHeight, x1, y1, x2, y2, color, thickness) {
         let ctx = canvas[0].getContext('2d');
-        drawOnCanvas(ctx, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness);
-        cacheAnnotation({
-            roomId:roomId, userId:userId, canvasWidth:canvasWidth, canvasHeight:canvasHeight, x1:x1, y1:y21, x2:x2, y2:y2, color:color, thickness:thickness
-        });
+        drawOnCanvas(ctx, canvasWidth, canvasHeight, x1, y1, x2, y2, color, thickness);
+        cacheAnnotation({roomId: roomId, w:canvasWidth, h:canvasHeight, x1:x1, y1:y1, x2:x2, y2:y2 });
     });
 
     // this is called when the src of the image is loaded
@@ -91,7 +85,9 @@ function initCanvas(sckt, imageUrl) {
                 // hide the image element as it is not needed
                 img.style.display = 'none';
             }
+            getAnnotationHistory(ctx, roomId);
         }, 10);
+
     });
 }
 

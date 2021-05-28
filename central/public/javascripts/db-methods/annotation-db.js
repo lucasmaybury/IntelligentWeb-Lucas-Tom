@@ -16,8 +16,10 @@ async function cacheAnnotation(annotationObject) {
  */
 async function getAnnotationHistory(ctx, roomId) {
     console.log("getting annotation history")
-    let annotations = await getRoomAnnotations(roomId);
-    annotations.forEach(annotation => {
-        drawOnCanvas(ctx, annotation.canvasWidth, annotation.canvasHeight, annotation.x1, annotation.y1, annotation.x2, annotation.y2, annotation.color, annotation.thickness);
+    getRoomAnnotations(roomId).then(annotations => {
+        annotations.forEach(annotation => {
+            drawOnCanvas(ctx, annotation.w, annotation.h, annotation.x1, annotation.y1, annotation.x2, annotation.y2, color, thickness);
+        });
     });
+
 }

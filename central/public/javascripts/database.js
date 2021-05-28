@@ -114,7 +114,7 @@ async function getRoomMessages(roomId) {
         await initDatabase();
     if (db) {
         try {
-            console.log('fetching: ' + roomId);
+            console.log('fetching messages for: ' + roomId);
             let tx = await db.transaction(MESSAGES_STORE_NAME, 'readonly'); //init transaction
             let store = await tx.objectStore(MESSAGES_STORE_NAME); //init store
             let roomIndex = await store.index('roomId'); //init room index
@@ -172,7 +172,7 @@ async function getRoomAnnotations(roomId) {
         await initDatabase();
     if (db) {
         try {
-            console.log('fetching: ' + roomId);
+            console.log('fetching annotations for room: ' + roomId);
             let tx = await db.transaction(ANNOTATIONS_STORE_NAME, 'readonly'); //init transaction
             let store = await tx.objectStore(ANNOTATIONS_STORE_NAME); //init store
             let roomIndex = await store.index('roomId'); //init room index

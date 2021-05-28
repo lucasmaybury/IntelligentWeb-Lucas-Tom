@@ -36,9 +36,9 @@ exports.init = function(io) {
             });
 
             // drawing on canvas
-            socket.on('drawing', (roomId, userId, canvasWidth, canvasHeight,
+            socket.on('drawing', (roomId, canvasWidth, canvasHeight,
                                   prevX, prevY, currX, currY, color, thickness) => {
-                socket.broadcast.to(roomId).emit('drawing', roomId, userId, canvasWidth, canvasHeight,
+                images.to(roomId).emit('drawing', roomId, canvasWidth, canvasHeight,
                                                 prevX, prevY, currX, currY, color, thickness);
             });
 
